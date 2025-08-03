@@ -35,47 +35,51 @@ class LoginForm {
     }
 
     fetch("js/login.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        usuario: user,
-        password: pass,
-        "g-recaptcha-response": token
-      })
-    })
-    .then(res => res.text())
-    .then(text => {
-      if (text.includes("OK")) {
-        // ✅ Usuario admin correcto
-        localStorage.setItem("adminLogeado", "true");
-        window.location.href = "reservaciones.html";
-      } else {
-        // ⬇️ Cualquier otro usuario → redirigir a index.html
-        localStorage.setItem("showRestrictedToast", "true"); // 👈 Guardamos bandera
-        window.location.href = "index.html";
-
-        // Guardar intento fallido en localStorage
-        const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
-        intentos.push({ usuario: user, fecha: new Date().toLocaleString() });
-        localStorage.setItem("intentosFallidos", JSON.stringify(intentos));
-
-        // Enviar alerta por EmailJS
-        emailjs.send("service_xpopdts", "template_n0qugjq", {
-          usuario: user,
-          fecha: new Date().toLocaleString(),
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+            usuario: user,
+            password: pass,
+            "g-recaptcha-response": token
         })
-        .then(() => console.log("📧 Alerta enviada."))
-        .catch(err => console.error("❌ Error EmailJS:", err));
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Respuesta servidor:", data);
 
-        // ⚠️ Reiniciar captcha para que se muestren imágenes otra vez
-        grecaptcha.reset();
-      }
+        if (data.status === "ok") {
+            localStorage.setItem("adminLogeado", "true");
+            window.location.href = "reservaciones.html";
+        } else if (data.status === "fail") {
+            localStorage.setItem("showRestrictedToast", "true");
+            // retrasar un poco para asegurar que se guarde en localStorage
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 100);
+
+            // Guardar intento fallido
+            const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
+            intentos.push({ usuario: user, fecha: new Date().toLocaleString() });
+            localStorage.setItem("intentosFallidos", JSON.stringify(intentos));
+
+            emailjs.send("service_xpopdts", "template_n0qugjq", {
+                usuario: user,
+                fecha: new Date().toLocaleString(),
+            }).then(() => console.log("📧 Alerta enviada."))
+              .catch(err => console.error("❌ Error EmailJS:", err));
+
+            grecaptcha.reset();
+        } else {
+            this.mensajeError.textContent = data.msg || "Error desconocido";
+            grecaptcha.reset();
+        }
     })
     .catch(err => {
-      console.error("❌ Fetch error:", err);
-      this.mensajeError.textContent = "Error de conexión.";
-      grecaptcha.reset();
+        console.error("❌ Fetch error:", err);
+        this.mensajeError.textContent = "Error de conexión.";
+        grecaptcha.reset();
     });
+
   }
 }
 

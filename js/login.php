@@ -1,15 +1,17 @@
 <?php
+header('Content-Type: application/json');
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $captcha = $_POST['g-recaptcha-response'] ?? '';
-    $user = $_POST['usuario'] ?? '';
-    $pass = $_POST['password'] ?? '';
+    $user = strtolower(trim($_POST['usuario'] ?? ''));
+    $pass = trim($_POST['password'] ?? '');
 
     if (empty($captcha)) {
-        echo "Captcha no enviado";
+        echo json_encode(["status" => "error", "msg" => "Captcha no enviado"]);
         exit;
     }
 
-    $secretKey = "6Le6y5crAAAAAD7cOmzFwMy4LpdbdmVTpgcPAB0o"; // Tu clave secreta
+    $secretKey = "6Le6y5crAAAAAD7cOmzFwMy4LpdbdmVTpgcPAB0o"; 
     $ip = $_SERVER['REMOTE_ADDR'];
 
     $response = file_get_contents(
@@ -21,18 +23,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $responseKeys = json_decode($response, true);
 
     if (!isset($responseKeys["success"]) || !$responseKeys["success"]) {
-        echo "Captcha inválido";
+        echo json_encode(["status" => "error", "msg" => "Captcha inválido"]);
         exit;
     }
 
-    // Validación de usuario
+    // Validación de usuario admin
     $adminUser = "admin@cinerama.com";
     $adminPass = "pmsl123";
 
-    if ($user === $adminUser && $pass === $adminPass) {
-        echo "OK";
+    if ($user === strtolower($adminUser) && $pass === $adminPass) {
+        echo json_encode(["status" => "ok"]);
     } else {
-        echo "LOGIN_INVALIDO";
+        echo json_encode(["status" => "fail"]);
     }
 }
 ?>
