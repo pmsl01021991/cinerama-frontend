@@ -2,17 +2,22 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reservaciones - Cinerama</title>
-  <link rel="stylesheet" href="css/Login.css">
-  <script src="js/login.js" defer></script>
 </head>
 <body>
   <h1>Panel de Reservaciones 🎬</h1>
-  <button id="cerrarSesionBtn">Cerrar Sesión</button>
+  <a href="logout.php">Cerrar Sesión</a> <!-- 👈 Nuevo archivo para logout -->
 
   <div id="contenedor-reservaciones">
-    <p>Aquí se mostrarán las reservaciones...</p>
+    <!-- Contenido dinámico -->
   </div>
+
+  <?php
+  session_start();
+  if (!isset($_SESSION['admin_logged'])) {
+    header("Location: login.html"); // 👈 Redirige si no hay sesión
+    exit;
+  }
+  ?>
 </body>
 </html>

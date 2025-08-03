@@ -3,46 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>Login - Cinerama</title>
-  <link rel="stylesheet" href="css/login.css"> 
-  
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script>
-    (function() {
-      emailjs.init("nFJQXJun_0mdXBQ6U"); // Tu Public Key
-    })();
-  </script>
-
-  <!-- reCAPTCHA v2 checkbox -->
+  <link rel="stylesheet" href="css/login.css">
+  <!-- reCAPTCHA -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
   <div class="login-container">
     <h2>Iniciar Sesión</h2>
-    
     <form id="form-login">
       <input type="text" id="usuario" name="usuario" placeholder="Correo electrónico" required>
       <input type="password" id="password" name="password" placeholder="Contraseña" required>
-
-      <!-- reCAPTCHA checkbox -->
+      <!-- reCAPTCHA -->
       <div class="g-recaptcha" data-sitekey="6Le6y5crAAAAAN-dhbDOxqJ8e-hhESbty8B1oFNU"></div>
-
       <p id="mensajeError"></p>
       <button type="submit">Iniciar sesión</button>
     </form>
   </div>
-
-  <!-- 🔹 Modal 2FA -->
-  <div id="modal2FA" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-    <div style="background:#fff; padding:20px; margin:100px auto; width:300px; text-align:center;">
-      <h3>Verificación 2FA</h3>
-      <p>Se ha enviado un código a tu correo</p>
-      <input type="text" id="codigo2FA" placeholder="Ingresa tu código">
-      <button id="btnVerificarCodigo">Verificar</button>
-    </div>
-  </div>
-
-  <!-- Script de login -->
   <script src="js/login.js"></script>
 </body>
 </html>

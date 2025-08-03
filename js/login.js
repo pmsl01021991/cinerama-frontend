@@ -1,31 +1,17 @@
-
 class LoginForm {
   constructor(formSelector) {
     this.form = document.querySelector(formSelector);
     this.usuarioInput = document.getElementById("usuario");
     this.passwordInput = document.getElementById("password");
     this.mensajeError = document.getElementById("mensajeError");
-
-    this.modal2FA = document.getElementById("modal2FA");
-    this.codigoInput = document.getElementById("codigo2FA");
-    this.btnVerificarCodigo = document.getElementById("btnVerificarCodigo");
-
     this.init();
   }
 
   init() {
-    if (this.form) {
-      this.form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        this.enviarFormulario();
-      });
-    }
-
-    if (this.btnVerificarCodigo) {
-      this.btnVerificarCodigo.addEventListener("click", () => {
-        this.verificarCodigo();
-      });
-    }
+    this.form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.enviarFormulario();
+    });
   }
 
   enviarFormulario() {
@@ -54,12 +40,8 @@ class LoginForm {
     })
     .then(res => res.text())
     .then(text => {
-      console.log("Respuesta COMPLETA del servidor:", text);
-      console.log("Respuesta del login.php:", text); // 🔹 Debug
-
-      if (text.includes("codigo_enviado")) {
-        // Muestra el modal 2FA y NO redirige
-        this.modal2FA.style.display = "block";
+      if (text.includes("LOGIN_EXITOSO")) {
+        window.location.href = "reservaciones.html"; // 👈 Redirige directamente
       } 
       else if (text.includes("LOGIN_INVALIDO")) {
         this.mensajeError.textContent = "Usuario o contraseña incorrectos.";
@@ -70,43 +52,14 @@ class LoginForm {
         grecaptcha.reset();
       } 
       else {
-        this.mensajeError.textContent = "Respuesta inesperada del servidor.";
-        grecaptcha.reset();
+        this.mensajeError.textContent = "Error inesperado. Intenta nuevamente.";
       }
     })
-
-  }
-
-  verificarCodigo() {
-    const codigo = this.codigoInput.value.trim();
-    if (!codigo) return alert("Ingresa el código 2FA");
-
-    fetch("js/verificar_codigo.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ codigo_2fa: codigo })
-    })
-    .then(res => res.text())
-    .then(text => {
-      if (text.includes("OK_2FA")) {
-        localStorage.setItem("adminLogeado", "true");
-        window.location.href = "reservaciones.html";
-      } else if (text.includes("SESION_EXPIRADA")) {
-        alert("Sesión expirada. Intenta loguearte de nuevo.");
-        window.location.reload();
-      } else {
-        alert("Código inválido.");
-        this.codigoInput.value = "";
-        this.codigoInput.focus();
-      }
-
-    })
-    .catch(err => console.error(err));
+    .catch(err => console.error("Error:", err));
   }
 }
 
 new LoginForm("#form-login");
-
 
 
 class AdminPanel {
