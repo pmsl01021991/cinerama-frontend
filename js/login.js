@@ -46,12 +46,13 @@ class LoginForm {
     .then(res => res.text())
     .then(text => {
       if (text.includes("OK")) {
+        // ✅ Usuario admin correcto
         localStorage.setItem("adminLogeado", "true");
-        window.location.href = "index.html";
+        window.location.href = "reservaciones.html";
       } else {
-        this.mensajeError.textContent = text === "LOGIN_INVALIDO"
-          ? "Usuario o contraseña incorrectos."
-          : "Error de captcha o servidor.";
+        // ⬇️ Cualquier otro usuario → redirigir a index.html
+        localStorage.setItem("showRestrictedToast", "true"); // 👈 Guardamos bandera
+        window.location.href = "index.html";
 
         // Guardar intento fallido en localStorage
         const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
@@ -79,6 +80,7 @@ class LoginForm {
 }
 
 new LoginForm("#form-login");
+
 
 
 

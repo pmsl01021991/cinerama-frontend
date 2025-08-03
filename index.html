@@ -229,6 +229,35 @@
 
     </section>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (localStorage.getItem("showRestrictedToast") === "true") {
+            localStorage.removeItem("showRestrictedToast"); // limpiar la bandera
+
+            // Crear el toast
+            const toast = document.createElement("div");
+            toast.textContent = "⚠️ Cuidado: acceso restringido";
+            toast.style.position = "fixed";
+            toast.style.bottom = "20px";
+            toast.style.right = "20px";
+            toast.style.background = "#ff4d4d";
+            toast.style.color = "white";
+            toast.style.padding = "12px 20px";
+            toast.style.borderRadius = "8px";
+            toast.style.fontFamily = "sans-serif";
+            toast.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
+            toast.style.zIndex = "9999";
+            document.body.appendChild(toast);
+
+            // Desaparecer en 3 segundos
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+            }
+        });
+        </script>
+
+
 
 
 
