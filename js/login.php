@@ -6,6 +6,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $user = $_POST['usuario'] ?? '';
     $pass = $_POST['password'] ?? '';
 
+    error_log("Usuario recibido: " . $user);  // 👈 Registra el usuario
+    error_log("Password recibido: " . $pass); // 👈 Registra la contraseña
+
     if (empty($captcha)) {
         echo "ERROR_CAPTCHA";
         exit;
@@ -31,6 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $adminPass = "pmsl123";
 
     if ($user === $adminUser && $pass === $adminPass) {
+
+        error_log("Credenciales VÁLIDAS"); 
         // Generar código 2FA
         $codigo = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 6);
 

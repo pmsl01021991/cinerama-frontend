@@ -54,6 +54,7 @@ class LoginForm {
     })
     .then(res => res.text())
     .then(text => {
+      console.log("Respuesta COMPLETA del servidor:", text);
       console.log("Respuesta del login.php:", text); // 🔹 Debug
 
       if (text.includes("codigo_enviado")) {
