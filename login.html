@@ -32,6 +32,16 @@
     </form>
   </div>
 
+  <!-- 🔹 Modal 2FA -->
+  <div id="modal2FA" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+    <div style="background:#fff; padding:20px; margin:100px auto; width:300px; text-align:center;">
+      <h3>Verificación 2FA</h3>
+      <p>Se ha enviado un código a tu correo</p>
+      <input type="text" id="codigo2FA" placeholder="Ingresa tu código">
+      <button id="btnVerificarCodigo">Verificar</button>
+    </div>
+  </div>
+
   <!-- Script de login -->
   <script src="js/login.js"></script>
 </body>

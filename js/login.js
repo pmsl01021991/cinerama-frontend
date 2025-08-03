@@ -1,4 +1,3 @@
-// js/login.js
 
 class LoginForm {
   constructor(formSelector) {
@@ -6,6 +5,10 @@ class LoginForm {
     this.usuarioInput = document.getElementById("usuario");
     this.passwordInput = document.getElementById("password");
     this.mensajeError = document.getElementById("mensajeError");
+
+    this.modal2FA = document.getElementById("modal2FA");
+    this.codigoInput = document.getElementById("codigo2FA");
+    this.btnVerificarCodigo = document.getElementById("btnVerificarCodigo");
 
     this.init();
   }
@@ -15,6 +18,12 @@ class LoginForm {
       this.form.addEventListener("submit", (e) => {
         e.preventDefault();
         this.enviarFormulario();
+      });
+    }
+
+    if (this.btnVerificarCodigo) {
+      this.btnVerificarCodigo.addEventListener("click", () => {
+        this.verificarCodigo();
       });
     }
   }
@@ -45,29 +54,14 @@ class LoginForm {
     })
     .then(res => res.text())
     .then(text => {
-      if (text.includes("OK")) {
-        // ✅ Usuario admin correcto
+      if (text.includes("codigo_enviado")) {
+        this.modal2FA.style.display = "block"; // Mostrar modal
+      } else if (text.includes("OK")) {
         localStorage.setItem("adminLogeado", "true");
         window.location.href = "reservaciones.html";
       } else {
-        // ⬇️ Cualquier otro usuario → redirigir a index.html
-        localStorage.setItem("showRestrictedToast", "true"); // 👈 Guardamos bandera
+        localStorage.setItem("showRestrictedToast", "true");
         window.location.href = "index.html";
-
-        // Guardar intento fallido en localStorage
-        const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
-        intentos.push({ usuario: user, fecha: new Date().toLocaleString() });
-        localStorage.setItem("intentosFallidos", JSON.stringify(intentos));
-
-        // Enviar alerta por EmailJS
-        emailjs.send("service_xpopdts", "template_n0qugjq", {
-          usuario: user,
-          fecha: new Date().toLocaleString(),
-        })
-        .then(() => console.log("📧 Alerta enviada."))
-        .catch(err => console.error("❌ Error EmailJS:", err));
-
-        // ⚠️ Reiniciar captcha para que se muestren imágenes otra vez
         grecaptcha.reset();
       }
     })
@@ -77,13 +71,36 @@ class LoginForm {
       grecaptcha.reset();
     });
   }
+
+  verificarCodigo() {
+    const codigo = this.codigoInput.value.trim();
+    if (!codigo) return alert("Ingresa el código 2FA");
+
+    fetch("js/verificar_codigo.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ codigo_2fa: codigo })
+    })
+    .then(res => res.text())
+    .then(text => {
+      if (text.includes("OK_2FA")) {
+        localStorage.setItem("adminLogeado", "true");
+        window.location.href = "reservaciones.html";
+      } else if (text.includes("SESION_EXPIRADA")) {
+        alert("Sesión expirada. Intenta loguearte de nuevo.");
+        window.location.reload();
+      } else {
+        alert("Código inválido.");
+        this.codigoInput.value = "";
+        this.codigoInput.focus();
+      }
+
+    })
+    .catch(err => console.error(err));
+  }
 }
 
 new LoginForm("#form-login");
-
-
-
-
 
 
 
