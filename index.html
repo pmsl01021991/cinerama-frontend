@@ -12,7 +12,7 @@
 
     <!-- Header -->
     <header>
-        <div class="logo" id="logo-cinerama" style="cursor:pointer;">CINERAMA</div>
+        <div class="logo" id="logo-cinerama">CINERAMA</div>
 
         
         <!-- Botón Hamburguesa -->
@@ -26,6 +26,7 @@
                 <a href="cartelera.html">Cartelera</a>
                 <li><a href="#estrenos">Estrenos</a></li>
                 <li><a href="contacto.html">Contáctenos</a></li>
+                <a href="login.html" id="adminLink">Iniciar Sesión</a>
             </ul>
         </nav>
     </header>
@@ -45,26 +46,26 @@
 
     <!-- Modal de Login -->
         <div id="loginModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close" onclick="cerrarModal()">&times;</span>
-            <h2>Acceso de Administrador</h2>
-            
-            <!-- CAPTCHA -->
-            <div id="captchaContainer"></div>
-            
-            <!-- Formulario -->
-            <form id="loginForm">
-            <input type="email" id="emailInput" placeholder="Ingresa tu correo" required />
-            <button type="submit">Enviar código</button>
-            </form>
+            <div class="modal-content">
+                <span class="close" onclick="cerrarModal()">&times;</span>
+                <h2>Acceso de Administrador</h2>
+                
+                <!-- Formulario con usuario, contraseña y captcha -->
+                <form action="procesar_login.php" method="POST"> 
+                    <input type="text" name="usuario" placeholder="Usuario" required>
+                    <input type="password" name="password" placeholder="Contraseña" required>
 
-            <!-- Verificación -->
-            <form id="verifyForm" style="display:none;">
-            <input type="text" id="codeInput" placeholder="Ingresa el código" required />
-            <button type="submit">Verificar</button>
-            </form>
+                    <!-- Aquí va el captcha -->
+                    <div class="g-recaptcha" data-sitekey="6Le6y5crAAAAAN-dhbDOxqJ8e-hhESbty8B1oFNU"></div>
+
+                    <button type="submit">Iniciar sesión</button>
+                </form>
+            </div>
         </div>
-        </div>
+
+        <!-- Script de reCAPTCHA -->
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 
 
     <!-- Sección Nuestros Cines -->
