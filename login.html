@@ -4,32 +4,48 @@
   <meta charset="UTF-8">
   <title>Login - Cinerama</title>
   <link rel="stylesheet" href="css/login.css"> 
-  <script src="js/login.js" defer></script>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <!-- NO cargues más js/login.js con defer aquí -->
+  
+  <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
     (function() {
-      emailjs.init("nFJQXJun_0mdXBQ6U"); // Usa tu Public Key exacta
+      emailjs.init("nFJQXJun_0mdXBQ6U"); // Tu Public Key
     })();
   </script>
- <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
+  <!-- reCAPTCHA Invisible -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
   <div class="login-container">
     <h2>Iniciar Sesión</h2>
-    <form id="form-login" method="POST" action="js/login.php">
+    <form id="form-login">
       <input type="text" id="usuario" name="usuario" placeholder="Correo electrónico" required>
       <input type="password" id="password" name="password" placeholder="Contraseña" required>
-
-      <!-- Aquí va el reCAPTCHA -->
-      <div class="g-recaptcha" data-sitekey="6Le6y5crAAAAAN-dhbDOxqJ8e-hhESbty8B1oFNU"></div>
-
       <p id="mensajeError"></p>
-      <button type="submit">Iniciar sesión</button>
-    </form>
-      </div>
 
-  
+      <!-- Botón con reCAPTCHA Invisible -->
+      <button
+        id="boton-login"
+        class="g-recaptcha"
+        data-sitekey="6Le6y5crAAAAAN-dhbDOxqJ8e-hhESbty8B1oFNU"
+        data-callback="onSubmit"
+        data-action="submit">
+        Iniciar sesión
+      </button>
+    </form>
+  </div>
+
+  <!-- Aquí va tu nuevo login.js -->
+  <script src="js/login.js"></script>
+
+  <!-- Callback que invoca tu función JS después de verificar captcha -->
+  <script>
+    function onSubmit(token) {
+      // Llama a tu función JS pasándole el token
+      window.loginWithCaptcha(token);
+    }
+  </script>
 </body>
 </html>

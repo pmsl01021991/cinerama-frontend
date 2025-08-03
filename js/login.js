@@ -7,65 +7,70 @@ class LoginForm {
     this.passwordInput = document.getElementById("password");
     this.mensajeError = document.getElementById("mensajeError");
 
-    this.adminUser = "admin@cinerama.com";
-    this.adminPass = "pmsl123";
-
     this.init();
   }
 
   init() {
     if (this.form) {
-      this.form.addEventListener("submit", (e) => this.handleSubmit(e));
+      // Ya no escuchamos el submit porque usaremos el botón con reCAPTCHA
+      this.form.addEventListener("submit", (e) => e.preventDefault());
     }
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    const user = this.usuarioInput.value;
-    const pass = this.passwordInput.value;
-    const captcha = grecaptcha.getResponse();
-
-    if (!captcha) {
-      this.mensajeError.textContent = "Por favor verifica el captcha.";
-      return;
-    }
-
-    // Enviar el formulario al servidor (PHP) usando fetch POST
-    fetch("js/login.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        usuario: user,
-        password: pass,
-        "g-recaptcha-response": captcha
-      })
-    })
-    .then(response => response.text())
-    .then(data => {
-      if (data.includes("OK")) {
-        localStorage.setItem("adminLogeado", "true");
-        window.location.href = "index.html";
-      } else {
-        this.mensajeError.textContent = "Usuario o contraseña incorrectos.";
-
-        const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
-        const timestamp = new Date().toLocaleString();
-        intentos.push({ usuario: user, fecha: timestamp });
-        localStorage.setItem("intentosFallidos", JSON.stringify(intentos));
-
-        // Enviar alerta por EmailJS
-        emailjs.send("service_xpopdts", "template_n0qugjq", {
-          usuario: user,
-          fecha: timestamp,
-        })
-        .then(() => console.log("📧 Alerta enviada exitosamente a tu correo."))
-        .catch((error) => console.error("❌ Error al enviar alerta:", error));
-      }
-    });
   }
 }
 
-  new LoginForm("#form-login");
+window.loginWithCaptcha = function(token) {
+  const usuarioInput = document.getElementById("usuario");
+  const passwordInput = document.getElementById("password");
+  const mensajeError = document.getElementById("mensajeError");
+
+  const user = usuarioInput.value.trim();
+  const pass = passwordInput.value.trim();
+
+  if (!user || !pass) {
+    mensajeError.textContent = "Por favor completa todos los campos.";
+    return;
+  }
+
+  fetch("js/login.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      usuario: user,
+      password: pass,
+      "g-recaptcha-response": token
+    })
+  })
+  .then(res => res.text())
+  .then(text => {
+    if (text.includes("OK")) {
+      localStorage.setItem("adminLogeado", "true");
+      window.location.href = "index.html";
+    } else {
+      mensajeError.textContent = text === "LOGIN_INVALIDO"
+        ? "Usuario o contraseña incorrectos."
+        : "Error de captcha o servidor.";
+
+      const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
+      intentos.push({ usuario: user, fecha: new Date().toLocaleString() });
+      localStorage.setItem("intentosFallidos", JSON.stringify(intentos));
+
+      emailjs.send("service_xpopdts", "template_n0qugjq", {
+        usuario: user,
+        fecha: new Date().toLocaleString(),
+      })
+      .then(() => console.log("📧 Alerta enviada."))
+      .catch(err => console.error("❌ Error EmailJS:", err));
+    }
+  })
+  .catch(err => {
+    console.error("❌ Fetch error:", err);
+    mensajeError.textContent = "Error de conexión.";
+  });
+};
+
+new LoginForm("#form-login");
+
+
 
 
 class AdminPanel {
