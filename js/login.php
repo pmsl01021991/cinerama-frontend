@@ -17,11 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Validar reCAPTCHA
     $secretKey = "6Le6y5crAAAAAD7cOmzFwMy4LpdbdmVTpgcPAB0o";
     $ip = $_SERVER['REMOTE_ADDR'];
-    $response = file_get_contents(
-        "https://www.google.com/recaptcha/api/siteverify?secret=" . urlencode($secretKey) .
-        "&response=" . urlencode($captcha) .
-        "&remoteip=" . urlencode($ip)
-    );
+    $url = "https://www.google.com/recaptcha/api/siteverify?" . http_build_query([
+    'secret' => $secretKey,
+    'response' => $captcha,
+    'remoteip' => $ip
+]);
+
+$response = file_get_contents($url);
     $responseKeys = json_decode($response, true);
 
     if (!isset($responseKeys["success"]) || !$responseKeys["success"]) {
