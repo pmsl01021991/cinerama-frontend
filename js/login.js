@@ -54,22 +54,26 @@ class LoginForm {
     })
     .then(res => res.text())
     .then(text => {
+      console.log("Respuesta del login.php:", text); // 🔹 Debug
+
       if (text.includes("codigo_enviado")) {
-        this.modal2FA.style.display = "block"; // Mostrar modal
-      } else if (text.includes("OK")) {
-        localStorage.setItem("adminLogeado", "true");
-        window.location.href = "reservaciones.html";
-      } else {
-        localStorage.setItem("showRestrictedToast", "true");
-        window.location.href = "index.html";
+        // Muestra el modal 2FA y NO redirige
+        this.modal2FA.style.display = "block";
+      } 
+      else if (text.includes("LOGIN_INVALIDO")) {
+        this.mensajeError.textContent = "Usuario o contraseña incorrectos.";
+        grecaptcha.reset();
+      } 
+      else if (text.includes("ERROR_CAPTCHA")) {
+        this.mensajeError.textContent = "Verifica el Captcha.";
+        grecaptcha.reset();
+      } 
+      else {
+        this.mensajeError.textContent = "Respuesta inesperada del servidor.";
         grecaptcha.reset();
       }
     })
-    .catch(err => {
-      console.error("❌ Fetch error:", err);
-      this.mensajeError.textContent = "Error de conexión.";
-      grecaptcha.reset();
-    });
+
   }
 
   verificarCodigo() {
