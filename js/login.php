@@ -17,17 +17,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Validar reCAPTCHA
     $secretKey = "6Le6y5crAAAAAD7cOmzFwMy4LpdbdmVTpgcPAB0o";
     $ip = $_SERVER['REMOTE_ADDR'];
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+    $url = "https://www.google.com/recaptcha/api/siteverify?" . http_build_query([
         'secret' => $secretKey,
         'response' => $captcha,
         'remoteip' => $ip
-    ]));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    curl_close($ch);
+    ]);
+
+    // Configura el contexto para evitar problemas SSL
+    $options = [
+        "ssl" => [
+            "verify_peer" => false,
+            "verify_peer_name" => false,
+        ],
+    ];
+
+    $context = stream_context_create($options);
+    $response = file_get_contents($url, false, $context);
+
+    if ($response === false) {
+        error_log("Error al conectar con reCAPTCHA");
+        echo "ERROR_CONEXION";
+        exit;
+    }
     $responseKeys = json_decode($response, true);
 
     if (!isset($responseKeys["success"]) || !$responseKeys["success"]) {
