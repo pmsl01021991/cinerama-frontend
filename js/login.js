@@ -12,63 +12,74 @@ class LoginForm {
 
   init() {
     if (this.form) {
-      // Ya no escuchamos el submit porque usaremos el botón con reCAPTCHA
-      this.form.addEventListener("submit", (e) => e.preventDefault());
+      this.form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        this.enviarFormulario();
+      });
     }
+  }
+
+  enviarFormulario() {
+    const user = this.usuarioInput.value.trim();
+    const pass = this.passwordInput.value.trim();
+    const token = document.querySelector('[name="g-recaptcha-response"]').value;
+
+    if (!user || !pass) {
+      this.mensajeError.textContent = "Por favor completa todos los campos.";
+      return;
+    }
+
+    if (!token) {
+      this.mensajeError.textContent = "Completa el captcha.";
+      return;
+    }
+
+    fetch("js/login.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        usuario: user,
+        password: pass,
+        "g-recaptcha-response": token
+      })
+    })
+    .then(res => res.text())
+    .then(text => {
+      if (text.includes("OK")) {
+        localStorage.setItem("adminLogeado", "true");
+        window.location.href = "index.html";
+      } else {
+        this.mensajeError.textContent = text === "LOGIN_INVALIDO"
+          ? "Usuario o contraseña incorrectos."
+          : "Error de captcha o servidor.";
+
+        // Guardar intento fallido en localStorage
+        const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
+        intentos.push({ usuario: user, fecha: new Date().toLocaleString() });
+        localStorage.setItem("intentosFallidos", JSON.stringify(intentos));
+
+        // Enviar alerta por EmailJS
+        emailjs.send("service_xpopdts", "template_n0qugjq", {
+          usuario: user,
+          fecha: new Date().toLocaleString(),
+        })
+        .then(() => console.log("📧 Alerta enviada."))
+        .catch(err => console.error("❌ Error EmailJS:", err));
+
+        // ⚠️ Reiniciar captcha para que se muestren imágenes otra vez
+        grecaptcha.reset();
+      }
+    })
+    .catch(err => {
+      console.error("❌ Fetch error:", err);
+      this.mensajeError.textContent = "Error de conexión.";
+      grecaptcha.reset();
+    });
   }
 }
 
-window.loginWithCaptcha = function(token) {
-  const usuarioInput = document.getElementById("usuario");
-  const passwordInput = document.getElementById("password");
-  const mensajeError = document.getElementById("mensajeError");
-
-  const user = usuarioInput.value.trim();
-  const pass = passwordInput.value.trim();
-
-  if (!user || !pass) {
-    mensajeError.textContent = "Por favor completa todos los campos.";
-    return;
-  }
-
-  fetch("js/login.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      usuario: user,
-      password: pass,
-      "g-recaptcha-response": token
-    })
-  })
-  .then(res => res.text())
-  .then(text => {
-    if (text.includes("OK")) {
-      localStorage.setItem("adminLogeado", "true");
-      window.location.href = "index.html";
-    } else {
-      mensajeError.textContent = text === "LOGIN_INVALIDO"
-        ? "Usuario o contraseña incorrectos."
-        : "Error de captcha o servidor.";
-
-      const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
-      intentos.push({ usuario: user, fecha: new Date().toLocaleString() });
-      localStorage.setItem("intentosFallidos", JSON.stringify(intentos));
-
-      emailjs.send("service_xpopdts", "template_n0qugjq", {
-        usuario: user,
-        fecha: new Date().toLocaleString(),
-      })
-      .then(() => console.log("📧 Alerta enviada."))
-      .catch(err => console.error("❌ Error EmailJS:", err));
-    }
-  })
-  .catch(err => {
-    console.error("❌ Fetch error:", err);
-    mensajeError.textContent = "Error de conexión.";
-  });
-};
-
 new LoginForm("#form-login");
+
 
 
 
