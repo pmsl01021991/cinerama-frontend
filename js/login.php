@@ -1,47 +1,36 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    session_start();
-
     $captcha = $_POST['g-recaptcha-response'] ?? '';
     $user = $_POST['usuario'] ?? '';
     $pass = $_POST['password'] ?? '';
 
-    // Debug: Verifica datos recibidos
-    error_log("Usuario: $user | Pass: $pass | Captcha: " . (!empty($captcha) ? "OK" : "FALTANTE"));
-
     if (empty($captcha)) {
-        echo "ERROR_CAPTCHA";
+        echo "Captcha no enviado";
         exit;
     }
 
-    // Validar reCAPTCHA (versión mejorada)
-    $secretKey = "6Le6y5crAAAAAD7cOmzFwMy4LpdbdmVTpgcPAB0o";
-    $url = "https://www.google.com/recaptcha/api/siteverify?" . http_build_query([
-        'secret' => $secretKey,
-        'response' => $captcha
-    ]);
+    $secretKey = "6Le6y5crAAAAAD7cOmzFwMy4LpdbdmVTpgcPAB0o"; // Tu clave secreta
+    $ip = $_SERVER['REMOTE_ADDR'];
 
-    $response = @file_get_contents($url); // @ suprime errores
-    if ($response === false) {
-        echo "ERROR_CONEXION";
-        exit;
-    }
+    $response = file_get_contents(
+        "https://www.google.com/recaptcha/api/siteverify?secret=" . urlencode($secretKey) .
+        "&response=" . urlencode($captcha) .
+        "&remoteip=" . urlencode($ip)
+    );
 
     $responseKeys = json_decode($response, true);
+
     if (!isset($responseKeys["success"]) || !$responseKeys["success"]) {
-        echo "ERROR_CAPTCHA";
+        echo "Captcha inválido";
         exit;
     }
 
-    // Validar credenciales (DEBUG: Asegúrate que coincidan)
+    // Validación de usuario
     $adminUser = "admin@cinerama.com";
     $adminPass = "pmsl123";
-    error_log("Credenciales esperadas: $adminUser / $adminPass");
 
     if ($user === $adminUser && $pass === $adminPass) {
-        $_SESSION['admin_logged'] = true;
-        $_SESSION['usuario'] = $user; // Opcional: guarda el usuario
-        echo "LOGIN_EXITOSO";
+        echo "OK";
     } else {
         echo "LOGIN_INVALIDO";
     }

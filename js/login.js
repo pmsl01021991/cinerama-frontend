@@ -4,23 +4,23 @@ class LoginForm {
     this.usuarioInput = document.getElementById("usuario");
     this.passwordInput = document.getElementById("password");
     this.mensajeError = document.getElementById("mensajeError");
+
     this.init();
   }
 
   init() {
-    this.form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      this.enviarFormulario();
-    });
+    if (this.form) {
+      this.form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        this.enviarFormulario();
+      });
+    }
   }
 
   enviarFormulario() {
     const user = this.usuarioInput.value.trim();
     const pass = this.passwordInput.value.trim();
-    const token = document.querySelector('[name="g-recaptcha-response"]')?.value;
-
-    // Resetear mensajes
-    this.mensajeError.textContent = "";
+    const token = document.querySelector('[name="g-recaptcha-response"]').value;
 
     if (!user || !pass) {
       this.mensajeError.textContent = "Por favor completa todos los campos.";
@@ -41,27 +41,38 @@ class LoginForm {
         "g-recaptcha-response": token
       })
     })
-    .then(res => {
-      if (!res.ok) throw new Error("Error HTTP: " + res.status);
-      return res.text();
-    })
+    .then(res => res.text())
     .then(text => {
-      console.log("Respuesta del servidor:", text); // Debug
-      if (text.trim() === "LOGIN_EXITOSO") {
+      if (text.includes("OK")) {
+        // ✅ Usuario admin correcto
+        localStorage.setItem("adminLogeado", "true");
         window.location.href = "reservaciones.html";
-      } else if (text.trim() === "LOGIN_INVALIDO") {
-        this.mensajeError.textContent = "Usuario o contraseña incorrectos.";
-        grecaptcha.reset();
-      } else if (text.trim() === "ERROR_CAPTCHA") {
-        this.mensajeError.textContent = "Captcha inválido. Intenta nuevamente.";
-        grecaptcha.reset();
       } else {
-        this.mensajeError.textContent = "Error inesperado: " + text;
+        localStorage.setItem("showRestrictedToast", "true"); // 👈 Guardamos bandera
+        // ⬇️ Cualquier otro usuario → redirigir a index.html
+        window.location.href = "index.html";
+
+        // Guardar intento fallido en localStorage
+        const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
+        intentos.push({ usuario: user, fecha: new Date().toLocaleString() });
+        localStorage.setItem("intentosFallidos", JSON.stringify(intentos));
+
+        // Enviar alerta por EmailJS
+        emailjs.send("service_xpopdts", "template_n0qugjq", {
+          usuario: user,
+          fecha: new Date().toLocaleString(),
+        })
+        .then(() => console.log("📧 Alerta enviada."))
+        .catch(err => console.error("❌ Error EmailJS:", err));
+
+        // ⚠️ Reiniciar captcha para que se muestren imágenes otra vez
+        grecaptcha.reset();
       }
     })
     .catch(err => {
-      console.error("Error en fetch:", err);
-      this.mensajeError.textContent = "Error de conexión. Intenta más tarde.";
+      console.error("❌ Fetch error:", err);
+      this.mensajeError.textContent = "Error de conexión.";
+      grecaptcha.reset();
     });
   }
 }

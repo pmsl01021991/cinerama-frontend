@@ -3,22 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>Login - Cinerama</title>
-  <link rel="stylesheet" href="css/login.css">
-  <!-- reCAPTCHA -->
+  <link rel="stylesheet" href="css/login.css"> 
+  
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init("nFJQXJun_0mdXBQ6U"); // Tu Public Key
+    })();
+  </script>
+
+  <!-- reCAPTCHA v2 checkbox -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
   <div class="login-container">
     <h2>Iniciar Sesión</h2>
+    
     <form id="form-login">
       <input type="text" id="usuario" name="usuario" placeholder="Correo electrónico" required>
       <input type="password" id="password" name="password" placeholder="Contraseña" required>
-      <!-- reCAPTCHA -->
+
+      <!-- reCAPTCHA checkbox -->
       <div class="g-recaptcha" data-sitekey="6Le6y5crAAAAAN-dhbDOxqJ8e-hhESbty8B1oFNU"></div>
+
       <p id="mensajeError"></p>
       <button type="submit">Iniciar sesión</button>
     </form>
   </div>
+
+  <!-- Script de login -->
   <script src="js/login.js"></script>
 </body>
 </html>
