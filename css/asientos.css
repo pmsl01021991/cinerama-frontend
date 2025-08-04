@@ -8,20 +8,53 @@
  
 /* Header */
 header {
-    background-color: #000;
+    position:fixed; /* ⬅️ muy importante */
+    top: 0;
+    background-color: #151515;
     color: #fff;
-    padding: 0.9375rem 1.875rem;
+    padding: 0.6rem 1.875rem;
     display: flex;
     justify-content: space-between;
+    width: 100%;
     align-items: center;
+    z-index: 1000;
+}
+ 
+main {
+       padding-top: 80px; /* Ajusta según la altura de tu barra de navegación */
 }
  
 header .logo {
     font-size: 1.75rem;
     font-weight: bold;
-    color: #e53935;
+    color: #e53935; /* rojo tipo Cinerama */
     font-family: Arial, sans-serif;
-    padding: 5px;
+}
+ 
+.nav-menu {
+    display: flex;
+}
+ 
+.nav-menu ul {
+    display: flex; /* 🔥 esto es lo que te falta para que se vea horizontal */
+    gap: 1.25rem; /* espacio entre links */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+ 
+.nav-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+}
+ 
+.nav-menu a:hover {
+    color: #e53935; /* efecto hover rojo */
+}
+ 
+section .slide {
+    padding: 4.5rem 1.25rem;
 }
  
 .btn-atras {

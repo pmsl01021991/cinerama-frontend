@@ -1,7 +1,3 @@
-html {
-    scroll-behavior: smooth;
-}
-
 /* Reset básico */
 * {
     margin: 0;
@@ -15,17 +11,13 @@ header {
     position:fixed; /* ⬅️ muy importante */
     top: 0;
     background-color: #151515;
-    color: #f7f7f9;
+    color: #fff;
     padding: 0.6rem 1.875rem;
     display: flex;
     justify-content: space-between;
     width: 100%;
     align-items: center;
     z-index: 1000; 
-}
-
-main {
-       padding-top: 80px; /* Ajusta según la altura de tu barra de navegación */
 }
 
 header .logo {
@@ -35,23 +27,25 @@ header .logo {
     font-family: Arial, sans-serif;
 }
 
-#nav-menu {
+.nav-menu {
     display: flex;
 }
 
-#nav-menu ul {
+.nav-menu ul {
+    display: flex; /* 🔥 esto es lo que te falta para que se vea horizontal */
+    gap: 1.25rem; /* espacio entre links */
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-header nav a {
+.nav-menu a {
     color: #fff;
     text-decoration: none;
     font-size: 1rem;
 }
 
-header nav a:hover {
+.nav-menu a:hover {
     color: #e53935; /* efecto hover rojo */
 }
 
@@ -63,9 +57,74 @@ header nav a:hover {
     padding: 6.25rem 1.25rem;
 }
 
+#cartelera {
+    padding: 2.5rem 1.25rem;
+    background-color: #f9f9f9;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2.5rem;
+}
+
+.peliculas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem;
+}
+
+.pelicula {
+    background-color: #fff;
+    border-radius: 0.3125rem;
+    box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    width: 220px;
+    padding: 0;
+}
+
+.pelicula img {
+    width: 100%;
+    height: 330px; /* 🔥 altura como poster */
+    object-fit: cover; /* 🔥 que llene el espacio */
+    border-radius: 0.3125rem 0.3125rem 0 0;
+    transition: transform 0.3s ease;
+}
+
+.pelicula button {
+    margin: 0.3125rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-trailer {
+    background-color: #e53935;
+    color: white;
+}
+
+.btn-infoestrenos {
+    display: inline-block;
+    margin: 0.3125rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #1976d2;
+    color: white;
+    font-weight: bold;
+    text-decoration: none; /* quitar subrayado */
+    text-align: center;
+    cursor: pointer;
+}
+
 /* Secciones */
 section {
-    padding: 4.5rem 1.25rem;
+    padding: 2.5rem 1.25rem;
 }
 
 section h2 {
@@ -79,18 +138,12 @@ section h2 {
     flex-wrap: wrap;
 }
 
-.pelicula {
-    background-color: #f4f4f4;
-    padding: 0.625rem;
-    border-radius: 0.3125rem;
-    text-align: center;
-    width: 12.5rem;
+section .slide {
+    padding: 4.5rem 1.25rem;
 }
 
-.pelicula img {
-    width: 100%;
-    height: auto;
-    border-radius: 0.3125rem;
+.pelicula img:hover {
+    transform: scale(1.05); /* 🔥 zoom 5% */
 }
 
 /* Formulario */
@@ -126,6 +179,10 @@ form button {
     background-color: #000; /* opcional */
 }
 
+section .slide {
+    padding: 4.5rem 1.25rem;
+}
+
 .slider .slide {
     position: absolute;
     top: 0;
@@ -149,84 +206,6 @@ form button {
     object-fit: contain;
 }
 
-#cines {
-    padding: 3.125rem 1.25rem;
-    background-color: #f9f9f9;
-}
-
-#cines h2 {
-    text-align: center;
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 2.5rem;
-}
-
-.cine-card {
-    max-width: 68.75rem;
-    margin: 1.25rem auto;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    background-color: #fff;
-}
-
-.cine-header {
-    background-color: #d32f2f; /* rojo bonito */
-    color: white;
-    padding: 0.9375rem 1.25rem;
-    font-size: 1.25rem;
-    font-weight: bold;
-}
-
-.cine-body {
-    display: flex;
-    flex-wrap: nowrap; /* para que no se acomoden debajo */
-    align-items: flex-start; /* alineación superior */
-    padding: 1.25rem;
-    gap: 1.25rem;
-}
-
-.cine-image {
-    flex: 1 1 60%;
-}
-
-.cine-image img {
-    width: 100%;
-    height: auto;
-    border-radius: 0.25rem;
-}
-
-.cine-info {
-    flex: 1 1 40%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.cine-info p {
-    margin-bottom: 1.25rem;
-    font-size: 1rem;
-    color: #333;
-    line-height: 1.5;
-}
-
-.btn-cartelera {
-    display: inline-block;       /* <-- agrega esta línea */
-    padding: 0.625rem 1.25rem;
-    background-color: #d32f2f;
-    color: white;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-weight: bold;
-    align-self: flex-start;
-    text-align: center;          /* <-- agrega esta línea */
-    text-decoration: none;       /* <-- agrega esta línea */
-}
-
-.btn-cartelera:hover {
-    background-color: #b71c1c;
-}
 
 /* Botón hamburguesa */
 .hamburger {
@@ -237,7 +216,51 @@ form button {
     z-index: 1000; /* para que siempre quede arriba */
 }
 
+/* Modal - pantalla oscura */
+.modal {
+    display: none; /* oculto por defecto */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* fondo oscuro */
 
+    /* CENTRADO con Flexbox */
+    
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* Contenido del modal (centrado y responsive) */
+.modal-content {
+    position: relative;
+    background-color: #000;
+    width: 90%; /* Responsive */
+    max-width: 800px;
+    aspect-ratio: 16 / 9;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+/* Iframe ocupa todo el contenedor */
+.modal-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Botón cerrar (X) */
+.close {
+    color: white;
+    position: absolute;
+    top: -30px;
+    right: 0;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
 
 /* Footer */
@@ -319,11 +342,11 @@ footer {
 /* Desktop */
 /* ========== DESKTOP (PC) ========== */
 @media (min-width: 769px) {
-    #nav-menu {
+    .nav-menu {
         display: flex;
     }
 
-    #nav-menu ul {
+    .nav-menu ul {
         display: flex;
         gap: 1.25rem;
         margin: 0;
@@ -381,38 +404,6 @@ footer {
         height: 13.75rem;
     }
 
-    /* Cine card responsive */
-    .cine-body {
-        flex-wrap: wrap;
-    }
-
-    .cine-image,
-    .cine-info {
-        flex: 1 1 100%;
-    }
-
-    .cine-info {
-        padding-top: 1.25rem;
-        text-align: center;
-    }
-
-    .btn-cartelera {
-        align-self: center;
-        padding: 0.5rem 1rem;
-        font-size: 0.875rem;
-    }
-
-    /* Cine header en mobile */
-    .cine-header {
-        font-size: 1.125rem;
-        padding: 0.625rem 0.9375rem;
-    }
-
-    .cine-info p {
-        font-size: 0.875rem;
-    }
-
-    /* Footer en mobile */
     .footer-container {
         flex-direction: column;
         text-align: center;

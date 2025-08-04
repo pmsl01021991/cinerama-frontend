@@ -5,29 +5,36 @@
     box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
-
+ 
 /* Header */
 header {
-    background-color: #000;
+    position:fixed; /* ⬅️ muy importante */
+    top: 0;
+    background-color: #151515;
     color: #fff;
-    padding: 0.9375rem 1.875rem;
+    padding: 0.6rem 1.875rem;
     display: flex;
     justify-content: space-between;
+    width: 100%;
     align-items: center;
-    position: relative; /* ⬅️ muy importante */
+    z-index: 1000;
 }
-
+ 
+main {
+       padding-top: 80px; /* Ajusta según la altura de tu barra de navegación */
+}
+ 
 header .logo {
     font-size: 1.75rem;
     font-weight: bold;
     color: #e53935; /* rojo tipo Cinerama */
     font-family: Arial, sans-serif;
 }
-
+ 
 .nav-menu {
     display: flex;
 }
-
+ 
 .nav-menu ul {
     display: flex; /* 🔥 esto es lo que te falta para que se vea horizontal */
     gap: 1.25rem; /* espacio entre links */
@@ -35,17 +42,20 @@ header .logo {
     margin: 0;
     padding: 0;
 }
-
+ 
 .nav-menu a {
     color: #fff;
     text-decoration: none;
     font-size: 1rem;
 }
-
+ 
 .nav-menu a:hover {
     color: #e53935; /* efecto hover rojo */
 }
-
+ 
+section .slide {
+    padding: 4.5rem 1.25rem;
+}
 /* Hero */
 .hero {
     background: url('https://via.placeholder.com/1200x400') center/cover no-repeat;
@@ -53,8 +63,10 @@ header .logo {
     text-align: center;
     padding: 6.25rem 1.25rem;
 }
-
+ 
 /* Slider */
+ 
+ 
 .slider {
     position: relative;
     width: 100%;
@@ -62,7 +74,7 @@ header .logo {
     overflow: hidden;
     background-color: #000; /* opcional */
 }
-
+ 
 .slider .slide {
     position: absolute;
     top: 0;
@@ -75,18 +87,18 @@ header .logo {
     justify-content: center;
     align-items: center;
 }
-
+ 
 .slider .slide.active {
     opacity: 1;
 }
-
+ 
 .slider img {
     max-height: 100%;
     max-width: 100%;
     object-fit: contain;
 }
-
-
+ 
+ 
 /* Botón hamburguesa */
 .hamburger {
     display: none;
@@ -95,14 +107,14 @@ header .logo {
     color: white;
     z-index: 1000; /* para que siempre quede arriba */
 }
-
+ 
 /* Ficha película */
 .ficha-pelicula,
 .horario {
     padding: 2rem 1rem;
     background-color: #f9f9f9;
 }
-
+ 
 .ficha-contenido {
     display: flex;
     flex-wrap: wrap;
@@ -111,30 +123,30 @@ header .logo {
     max-width: 1200px;
     margin: 0 auto;
 }
-
+ 
 .ficha-poster img {
     width: 300px;
     height: auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
-
+ 
 .ficha-info {
     flex: 1 1 500px;
     font-size: 1rem;
     line-height: 1.6;
     color: #333;
 }
-
+ 
 .ficha-info h1 {
     color: #e53935;
     margin-bottom: 1rem;
 }
-
+ 
 .etiquetas {
     margin-bottom: 1rem;
 }
-
+ 
 .etiqueta {
     display: inline-block;
     padding: 0.25rem 0.75rem;
@@ -144,29 +156,29 @@ header .logo {
     margin-right: 0.5rem;
     font-size: 0.875rem;
 }
-
+ 
 .etiqueta.rojo {
     background-color: #e53935;
 }
-
+ 
 .etiqueta.azul {
-    background-color: #1976d2;
+    background-color: #1e8eda;
 }
-
+ 
 .etiqueta.gris {
     background-color: #555;
 }
-
+ 
 .ficha-poster {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
+ 
 .boton-trailer-container {
     margin-top: 10px;
 }
-
+ 
 .btn-trailer {
     display: inline-block;
     background-color: #e53935;
@@ -181,12 +193,12 @@ header .logo {
     transition: background-color 0.3s ease;
     margin-top: 1rem; /* opcional: para separar de la imagen */
 }
-
+ 
 .btn-trailer:hover {
     background-color: #c62828;
 }
-
-
+ 
+ 
 /* Modal - pantalla oscura */
 .modal {
     display: none; /* oculto por defecto */
@@ -197,14 +209,14 @@ header .logo {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8); /* fondo oscuro */
-
+ 
     /* CENTRADO con Flexbox */
-    
+   
     justify-content: center;
     align-items: center;
     padding: 1rem;
 }
-
+ 
 /* Contenido del modal (centrado y responsive) */
 .modal-content {
     position: relative;
@@ -214,14 +226,14 @@ header .logo {
     aspect-ratio: 16 / 9;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
-
+ 
 /* Iframe ocupa todo el contenedor */
 .modal-content iframe {
     width: 100%;
     height: 100%;
     border: none;
 }
-
+ 
 /* Botón cerrar (X) */
 .close {
     color: white;
@@ -232,13 +244,13 @@ header .logo {
     font-weight: bold;
     cursor: pointer;
 }
-
-
+ 
+ 
 /* Horarios */
 .horario {
     font-size: 1rem;
 }
-
+ 
 .horario-contenido {
     display: flex;
     flex-direction: column;
@@ -246,11 +258,11 @@ header .logo {
     max-width: 1200px;
     margin: auto;
 }
-
+ 
 .horario-contenido h2 {
     color: #e53935
 }
-
+ 
 .horario-2d p,
 .horario-3d p {
     display: flex;
@@ -260,7 +272,7 @@ header .logo {
     font-weight: 500;
     margin-bottom: 2rem;
 }
-
+ 
 .horario-2d p::before {
     content: '2D';
     border: 2px #0D1F40 solid;
@@ -269,7 +281,7 @@ header .logo {
     font-weight: bold;
     color: #0D1F40;
 }
-
+ 
 .horario-3d p::before {
     content: '3D';
     border: 2px #0D1F40 solid;
@@ -278,13 +290,13 @@ header .logo {
     font-weight: bold;
     color: #0D1F40;
 }
-
+ 
 .horario-listas {
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
 }
-
+ 
 .horario-listas div {
     border: 2px #c62828 solid;
     color: #c62828;
@@ -293,7 +305,7 @@ header .logo {
     cursor: pointer;
     font-size: 1.1rem;
 }
-
+ 
 /* Footer */
 footer {
     background: #222;
@@ -301,22 +313,22 @@ footer {
     padding: 3vw 5vw;
     font-family: Arial, sans-serif;
 }
-
+ 
 .footer-container {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 2vw; 
+    gap: 2vw;
     max-width: 90vw;
     margin: auto;
 }
-
+ 
 .footer-section {
     flex: 1;
-    min-width: 20vw; 
+    min-width: 20vw;
     margin-bottom: 2vh;
 }
-
+ 
 .footer-section h3 {
     font-size: 1.2rem;
     margin-bottom: 1vh;
@@ -329,71 +341,71 @@ footer {
     text-decoration: none;
     font-size: 1rem;
 }
-
+ 
 .footer-section a:hover {
     color: #ffcc00;
 }
-
+ 
 .social-links, .quick-links {
     list-style: none;
     padding: 0;
 }
-
+ 
 .social-links li, .quick-links li {
     margin-bottom: 0.8vh;
 }
-
+ 
 .footer-bottom b p {
    background-color: #3a46ee;/* Color de fondo */
    padding: 8vh;           /* Margen interno */
    text-align: center;      /*Alinemiento centro */
    color: white;
-    
-    
+   
+   
 }
-
+ 
 .marquee {
     width: 100%;
     height: 3.125rem;
     overflow: hidden;
     position: relative;
   }
-  
+ 
   .marquee-text {
     position: absolute;
     white-space: nowrap;
     animation: bounce-left 5s linear infinite;
     font-weight: bold;
   }
-
-
-
+ 
+ 
+ 
 /* ======================== */
 /* RESPONSIVE DESIGN        */
 /* ======================== */
-
+ 
 /* Desktop */
 /* ========== DESKTOP (PC) ========== */
 @media (min-width: 769px) {
     .nav-menu {
         display: flex;
     }
-
+ 
     .nav-menu ul {
         display: flex;
         gap: 1.25rem;
         margin: 0;
         padding: 0;
     }
-
+ 
     .hamburger {
         display: none;
     }
 }
-
+ 
 /* ========== CELULARES (responsive unificado) ========== */
 @media (max-width: 768px) {
-
+ 
     /* Botón hamburguesa */
     .hamburger {
         display: block;
@@ -403,7 +415,7 @@ footer {
         z-index: 1000;
         padding: 0.625rem;
     }
-
+ 
     /* Menú oculto por defecto */
     #nav-menu {
         display: none;
@@ -413,12 +425,12 @@ footer {
         padding: 0.625rem 0;
         position: static;
     }
-
+ 
     /* Menú visible cuando está activo */
     #nav-menu.active {
         display: flex;
     }
-
+ 
     /* Estilo del ul en mobile */
     #nav-menu ul {
         display: block !important; /* 🔥 esto fuerza que en mobile sea block */
@@ -427,16 +439,16 @@ footer {
         margin: 0;
         padding: 0;
     }
-
+ 
     #nav-menu ul li {
         margin: 0.625rem 0;
     }
-
+ 
     /* Slider más pequeño */
     .slider {
         height: 13.75rem;
     }
-
+ 
     .footer-container {
         flex-direction: column;
         text-align: center;

@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Cartelera</title>
-    <link rel="stylesheet" href="css/cartelera.css" />
-    <script src="js/cartelera.js" defer></script>
+    <title>Estrenos</title>
+    <link rel="stylesheet" href="css/estrenos.css" />
+    <script src="js/estrenos.js" defer></script>
+    <link rel="stylesheet" href="css/logo.css">
 </head>
 <body>
 
     <!-- Header -->
     <header>
-        <div class="logo">CINERAMA</div>
+        <div class="logo" id="logo-cinerama">CINERAMA</div>
         
         <!-- Botón Hamburguesa -->
         <div class="hamburger">☰</div>
@@ -19,9 +20,10 @@
         <nav id="nav-menu" class="nav-menu">
             <ul>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="estrenos">Estrenos</a></li>
+                <li><a href="cartelera.html">Cartelera</a></li>
                 <li><a href="contacto.html">Contáctenos</a></li>
             </ul>
+
         </nav>
     </header>
 
@@ -40,44 +42,44 @@
     
 
     <!-- Sección Cartelera -->
-    <section id="cartelera">
-        <h2>Cartelera Actual</h2>
+    <section id="estrenos">
+        <h2>Estrenos</h2>
 
         <div class="peliculas">
             <!-- Película 1 -->
             <div class="pelicula">
-                <img src="imagenes/banner1.jpg" alt="Película 1">
+                <img src="imagenes/estrenos/chihiro.png" alt="Película 1">
                 <div>
-                    <button class="btn-trailer" data-video="https://www.youtube.com/embed/9JIyINjMfcc">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=lilo" class="btn-info">INFO</a>
+                    <button class="btn-trailer" data-video="https://www.youtube.com/watch?v=ByXuk9QqQkk&t=2s">🎬 TRAILER</button>
+                    <a href="infoestrenos.html?pelicula=chihiro" class="btn-infoestrenos">INFO</a>
 
                 </div>
             </div>
 
             <!-- Película 2 -->
             <div class="pelicula">
-                <img src="imagenes/karatekid.jpg" alt="Película 2">
+                <img src="imagenes/estrenos/stans.png" alt="Película 2">
                 <div>
-                    <button class="btn-trailer" data-video="https://www.youtube.com/embed/ZWoFMg7XVHA">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=karate" class="btn-info">INFO</a>
+                    <button class="btn-trailer" data-video="https://www.youtube.com/watch?v=DZkDackH-H8">🎬 TRAILER</button>
+                    <a href="infoestrenos.html?pelicula=Stans" class="btn-infoestrenos">INFO</a>
                 </div>
             </div>
             
             <!-- Película 3 -->
             <div class="pelicula">
-                <img src="imagenes/encerrado.jpg" alt="Película 3">
+                <img src="imagenes/estrenos/live.png" alt="Película 3">
                 <div>
-                    <button class="btn-trailer"data-video="https://www.youtube.com/embed/py7BEMruWZw">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=encerrado" class="btn-info">INFO</a>
+                    <button class="btn-trailer"data-video="https://www.youtube.com/watch?v=R2bJBQSTSAs">🎬 TRAILER</button>
+                    <a href="infoestrenos.html?pelicula=LIVE" class="btn-infoestrenos">INFO</a>
                 </div>
             </div>
 
             <!-- Película 4 -->
             <div class="pelicula">
-                <img src="imagenes/hurry.jpg" alt="Película 4">
+                <img src="imagenes/estrenos/miraculo.png" alt="Película 4">
                 <div>
-                    <button class="btn-trailer" data-video="https://www.youtube.com/embed/zFxDwQK0yVQ">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=hurry" class="btn-info">INFO</a>
+                    <button class="btn-trailer" data-video="https://www.youtube.com/watch?v=MqLTqsyvDvA">🎬 TRAILER</button>
+                    <a href="infoestrenos.html?pelicula=Miraculous" class="btn-infoestrenos">INFO</a>
                 </div>
             </div>
         </div>

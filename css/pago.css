@@ -6,24 +6,116 @@
     font-family: Arial, sans-serif;
 }
 
-/* Estructura con contenedor general */
-body {
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
+/* Header */
+header {
+    position:fixed; /* ⬅️ muy importante */
+    top: 0;
+    background-color: #151515;
+    color: #f6f9fc;
+    padding: 0.6rem 1.875rem;
     display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    z-index: 1000; 
 }
 
-main {
-    flex: 1; /* Ocupa todo el espacio disponible */
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+header .logo {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #e7ef4c; /* Color del logo */
+    font-family: Arial, sans-serif;
+    animation: pulse 1.5s infinite; /* Añade la animación */
+}
+section .slide {
+    padding: 4.5rem 1.25rem;
+}
+.nav-menu {
+    display: flex;
+}
+
+.nav-menu ul {
+    display: flex; /* 🔥 esto es lo que te falta para que se vea horizontal */
+    gap: 1.25rem; /* espacio entre links */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.nav-menu a:hover {
+    color: #e53584; /* efecto hover rojo */
+}
+
+/* Hero */
+.hero {
+    background: url('https://via.placeholder.com/1200x400') center/cover no-repeat;
+    color: #fff;
+    text-align: center;
+    padding: 6.25rem 1.25rem;
+}
+
+/* Slider */
+.slider {
+    position: relative;
+    width: 100%;
+    height: 31.25rem; /* ajusta el alto como te guste */
+    overflow: hidden;
+    background-color: #000; /* opcional */
+}
+
+.slider .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Arriba */
-    padding: 2rem;
+    align-items: center;
 }
+
+.slider .slide.active {
+    opacity: 1;
+}
+
+.slider img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* Botón hamburguesa */
+.hamburger {
+    display: none;
+    font-size: 2.125rem; /* más grande */
+    cursor: pointer;
+    color: white;
+    z-index: 1000; /* para que siempre quede arriba */
+}
+
 
 .pago-formulario {
     background-color: #fff;
@@ -34,6 +126,15 @@ main {
     max-width: 25rem; /* 400px */
     margin: 0 auto;
 }
+
+main {
+    flex: 1; /* Ocupa todo el espacio disponible */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Arriba */
+    padding: 2rem;
+}
+
 
 h2 {
     color: #003366;
@@ -203,6 +304,22 @@ footer {
     animation: bounce-left 5s linear infinite;
     font-weight: bold;
 }
+@media (min-width: 769px) {
+    #nav-menu {
+        display: flex;
+    }
+
+    #nav-menu ul {
+        display: flex;
+        gap: 1.25rem;
+        margin: 0;
+        padding: 0;
+    }
+
+    .hamburger {
+        display: none;
+    }
+}
 
 /* ✅ Extra: Responsive para móviles */
 @media (max-width: 768px) {
@@ -217,5 +334,51 @@ footer {
     .footer-container {
         flex-direction: column;
         text-align: center;
+    }
+}
+/* ========== CELULARES (responsive unificado) ========== */
+@media (max-width: 768px) {
+
+    /* Botón hamburguesa */
+    .hamburger {
+        display: block;
+        font-size: 2.125rem;
+        cursor: pointer;
+        color: white;
+        z-index: 1000;
+        padding: 0.625rem;
+    }
+
+    /* Menú oculto por defecto */
+    #nav-menu {
+        display: none;
+        flex-direction: column;
+        background-color: #000;
+        width: 100%;
+        padding: 0.625rem 0;
+        position: static;
+    }
+
+    /* Menú visible cuando está activo */
+    #nav-menu.active {
+        display: flex;
+    }
+
+    /* Estilo del ul en mobile */
+    #nav-menu ul {
+        display: block !important; /* 🔥 esto fuerza que en mobile sea block */
+        text-align: center;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    #nav-menu ul li {
+        margin: 0.625rem 0;
+    }
+
+    /* Slider más pequeño */
+    .slider {
+        height: 13.75rem;
     }
 }

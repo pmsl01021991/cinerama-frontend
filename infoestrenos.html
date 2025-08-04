@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Cartelera</title>
-    <link rel="stylesheet" href="css/cartelera.css" />
-    <script src="js/cartelera.js" defer></script>
+    <title>Info</title>
+    <link rel="stylesheet" href="css/info.css" />
+    <script src="js/infoestrenos.js" defer></script>
+    <link rel="stylesheet" href="css/logo.css">
 </head>
+
 <body>
 
     <!-- Header -->
     <header>
-        <div class="logo">CINERAMA</div>
+        <div class="logo" id="logo-cinerama">CINERAMA</div>
         
         <!-- Botón Hamburguesa -->
         <div class="hamburger">☰</div>
@@ -19,12 +21,14 @@
         <nav id="nav-menu" class="nav-menu">
             <ul>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="estrenos">Estrenos</a></li>
+                <li><a href="estrenos.html">Estrenos</a></li>
                 <li><a href="contacto.html">Contáctenos</a></li>
             </ul>
         </nav>
     </header>
 
+    
+    <!-- Slider -->
     <section class="slider">
         <div class="slide active">
             <img src="imagenes/banner1.jpg" alt="Banner 1">
@@ -37,53 +41,46 @@
         </div>
     </section>
 
-    
+    <!-- Espacio de separación -->
+    <div style="height: 2rem;"></div>
 
-    <!-- Sección Cartelera -->
-    <section id="cartelera">
-        <h2>Cartelera Actual</h2>
+    <!-- Ficha de la película -->
+    <section class="ficha-pelicula">
+        <div class="ficha-contenido">
 
-        <div class="peliculas">
-            <!-- Película 1 -->
-            <div class="pelicula">
-                <img src="imagenes/banner1.jpg" alt="Película 1">
-                <div>
-                    <button class="btn-trailer" data-video="https://www.youtube.com/embed/9JIyINjMfcc">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=lilo" class="btn-info">INFO</a>
-
+            <!-- Imagen -->
+            <div class="ficha-poster">
+                <img id="poster-pelicula" src="" alt="Poster Película">
+                
+                <!-- Contenedor para centrar el botón -->
+                <div class="boton-trailer-container">
+                    <button class="btn-trailer" id="btnTrailer">🎬 Ver Trailer</button>
                 </div>
             </div>
 
-            <!-- Película 2 -->
-            <div class="pelicula">
-                <img src="imagenes/karatekid.jpg" alt="Película 2">
-                <div>
-                    <button class="btn-trailer" data-video="https://www.youtube.com/embed/ZWoFMg7XVHA">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=karate" class="btn-info">INFO</a>
+            <!-- Información -->
+            <div class="ficha-info">
+                <h1 id="titulo-pelicula"></h1>
+
+                <div class="etiquetas">
+                    <span class="etiqueta rojo" id="categoria-1"></span>
+                    <span class="etiqueta azul" id="categoria-2"></span>
+                    <span class="etiqueta gris" id="categoria-3"></span>
                 </div>
-            </div>
-            
-            <!-- Película 3 -->
-            <div class="pelicula">
-                <img src="imagenes/encerrado.jpg" alt="Película 3">
-                <div>
-                    <button class="btn-trailer"data-video="https://www.youtube.com/embed/py7BEMruWZw">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=encerrado" class="btn-info">INFO</a>
-                </div>
+
+                <p><b>🎬 Director:</b> <span id="director"></span></p>
+                <p><b>⏱️ Duración:</b> <span id="duracion"></span></p>
+                <p><b>📅 Estreno:</b> <span id="estreno"></span></p>
+                <p><b>👥 Reparto:</b> <span id="reparto"></span></p>
+
+                <h2 style="color: #b71c1c; margin-top: 1rem;">📖 Sinopsis</h2>
+                <p id="sinopsis"></p>
             </div>
 
-            <!-- Película 4 -->
-            <div class="pelicula">
-                <img src="imagenes/hurry.jpg" alt="Película 4">
-                <div>
-                    <button class="btn-trailer" data-video="https://www.youtube.com/embed/zFxDwQK0yVQ">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=hurry" class="btn-info">INFO</a>
-                </div>
-            </div>
         </div>
     </section>
 
-    
+    <!-- Horarios -->
     <!-- Footer -->
     <footer>
         <div class="footer-container">
@@ -109,7 +106,6 @@
                 <ul class="quick-links">
                     <a href="#inicio" class="scroll-suave">Inicio</a>
                     <li><a href="#pedidos">Pedidos</a></li>
-                    
                 </ul>
             </div>
         </div>
@@ -125,12 +121,12 @@
     </footer>
 
     <!-- Modal para el trailer -->
-        <div id="trailerModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <iframe id="trailerVideo" width="560" height="315" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            </div>
+    <div id="trailerModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <iframe id="trailerVideo" width="560" height="315" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
+    </div>
 
 </body>
 </html>
