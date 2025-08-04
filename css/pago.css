@@ -17,7 +17,7 @@ header {
     justify-content: space-between;
     width: 100%;
     align-items: center;
-    z-index: 1000; 
+    z-index: 1000;
 }
 
 
@@ -125,6 +125,7 @@ section .slide {
     width: 100%;
     max-width: 25rem; /* 400px */
     margin: 0 auto;
+    border: 2px solid #aca4a4;
 }
 
 main {
