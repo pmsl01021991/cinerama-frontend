@@ -253,7 +253,7 @@ class BtnHoraHandler {
                 sinopsis: `Chihiro es una niña que queda atrapada en un mundo mágico y debe encontrar el valor para salvar a sus padres y regresar a casa.`,
                 poster: "imagenes/estrenos/chihiro.png",
                 categorias: ["TODO ESPECTADOR", "ANIMADO", "CINE COLOR"],
-                trailer: "https://www.youtube.com/embed/ByXuk9QqQkk&t=2s"
+                trailer: "https://www.youtube.com/embed/5Fgq4Osh6XQ"
             },
             Stans: {
                 titulo: "Stans",
@@ -264,7 +264,7 @@ class BtnHoraHandler {
                 sinopsis: "Lanzada en el año 2000, la canción «Stan» de Eminem, que trata sobre un fan obsesivo e inestable, sigue siendo icónica. ",
                 poster: "imagenes/estrenos/stans.png",
                 categorias: ["mayor de 18 años"],
-                trailer: "https://www.cineplanet.com.pe/peliculas/stans"
+                trailer: "https://www.youtube.com/embed/7Zn1e11CJ-0"
             },
             LIVE: {
                 titulo: "LIVE VIEWING",
@@ -275,7 +275,7 @@ class BtnHoraHandler {
                 sinopsis: "Desde Goyang hasta Japón, Norteamérica y Europa, Jin emprende un increíble recorrido para encontrarse con su querido ARMY en esta primera gira mundial como solista.",
                 poster: "imagenes/estrenos/live.png",
                 categorias: ["MAYORES DE 14", "THRILLER", "DRAMA"],
-                trailer: "https://www.youtube.com/embed/DZkDackH-H8"
+                trailer: "https://www.youtube.com/embed/R2bJBQSTSAs"
             },
             Miraculous: {
                 titulo: "Miraculous",
