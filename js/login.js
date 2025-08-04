@@ -17,7 +17,10 @@ class LoginForm {
   enviarFormulario() {
     const user = this.usuarioInput.value.trim();
     const pass = this.passwordInput.value.trim();
-    const token = document.querySelector('[name="g-recaptcha-response"]').value;
+    const token = document.querySelector('[name="g-recaptcha-response"]')?.value;
+
+    // Resetear mensajes
+    this.mensajeError.textContent = "";
 
     if (!user || !pass) {
       this.mensajeError.textContent = "Por favor completa todos los campos.";
@@ -38,24 +41,28 @@ class LoginForm {
         "g-recaptcha-response": token
       })
     })
-    .then(res => res.text())
+    .then(res => {
+      if (!res.ok) throw new Error("Error HTTP: " + res.status);
+      return res.text();
+    })
     .then(text => {
-      if (text.includes("LOGIN_EXITOSO")) {
-        window.location.href = "reservaciones.html"; // 👈 Redirige directamente
-      } 
-      else if (text.includes("LOGIN_INVALIDO")) {
+      console.log("Respuesta del servidor:", text); // Debug
+      if (text.trim() === "LOGIN_EXITOSO") {
+        window.location.href = "reservaciones.html";
+      } else if (text.trim() === "LOGIN_INVALIDO") {
         this.mensajeError.textContent = "Usuario o contraseña incorrectos.";
         grecaptcha.reset();
-      } 
-      else if (text.includes("ERROR_CAPTCHA")) {
-        this.mensajeError.textContent = "Verifica el Captcha.";
+      } else if (text.trim() === "ERROR_CAPTCHA") {
+        this.mensajeError.textContent = "Captcha inválido. Intenta nuevamente.";
         grecaptcha.reset();
-      } 
-      else {
-        this.mensajeError.textContent = "Error inesperado. Intenta nuevamente.";
+      } else {
+        this.mensajeError.textContent = "Error inesperado: " + text;
       }
     })
-    .catch(err => console.error("Error:", err));
+    .catch(err => {
+      console.error("Error en fetch:", err);
+      this.mensajeError.textContent = "Error de conexión. Intenta más tarde.";
+    });
   }
 }
 
