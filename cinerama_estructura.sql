@@ -98,4 +98,35 @@ UPDATE cine SET imagen = 'cine_quinde.jpg'     WHERE nombre = 'Cine Quinde';
 UPDATE cine SET imagen = 'cine_sol.jpg' WHERE nombre = 'Cine Sol';
 UPDATE cine SET imagen = 'cine_tarapoto.jpg'     WHERE nombre = 'Cine Tarapoto';
 
+select * from cine
+
+-- Insertar cines
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Cajamarca', 'Jr. Amazonas 123, Cajamarca');
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Minka', 'Av. Argentina 1234, Callao');
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Chimbote', 'Av. Pacifico 456, Chimbote');
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Cuzco', 'Calle Sol 789, Cuzco');
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Huacho', 'Av. Grau 456, Huacho');
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Moyobamba', 'Jr. Lamas 234, Moyobamba');
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Pacifico', 'Av. Mar 567, Lima');
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Piura', 'Av. Sullana 123, Piura');
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Quinde', 'Calle Principal 999, Cajamarca');
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Sol', 'Av. Bolívar 111, Lima');
+INSERT INTO cine (nombre, direccion) VALUES ('Cine Tarapoto', 'Jr. Amazonas 456, Tarapoto');
+
+SELECT * FROM cine WHERE nombre = 'Cine Moyobamba';
+
+DELETE FROM cine WHERE id = 6;
+
+UPDATE cine SET imagen = 'cine_cajamarca.jpg' WHERE nombre = 'Cine Cajamarca';
+UPDATE cine SET imagen = 'cine_minka.jpg' WHERE nombre = 'Cine Minka';
+UPDATE cine SET imagen = 'cine_chimbote.jpg' WHERE nombre = 'Cine Chimbote';
+UPDATE cine SET imagen = 'cine_cuzco.jpg' WHERE nombre = 'Cine Cuzco';
+UPDATE cine SET imagen = 'cine_huacho.jpg' WHERE nombre = 'Cine Huacho';
+UPDATE cine SET imagen = 'cine_moyobamba.jpg' WHERE nombre = 'Cine Moyobamba';
+UPDATE cine SET imagen = 'cine_pacifico.jpg' WHERE nombre = 'Cine Pacifico';
+UPDATE cine SET imagen = 'cine_piura.jpg' WHERE nombre = 'Cine Piura';
+UPDATE cine SET imagen = 'cine_quinde.jpg' WHERE nombre = 'Cine Quinde';
+UPDATE cine SET imagen = 'cine_sol.jpg' WHERE nombre = 'Cine Sol';
+UPDATE cine SET imagen = 'cine_tarapoto.jpg' WHERE nombre = 'Cine Tarapoto';
+
 
