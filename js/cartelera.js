@@ -79,4 +79,41 @@ trailerButtons.forEach(button => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const id_cine = params.get('id_cine');
+
+    if (!id_cine) {
+        alert("No se especificó el cine.");
+        return;
+    }
+
+    fetch(`obtener-cartelera.php?id_cine=${id_cine}`)
+        .then(response => response.json())
+        .then(peliculas => {
+            const contenedor = document.getElementById('contenedor-cartelera'); // Asegúrate que exista en tu HTML
+
+            if (!peliculas.length) {
+                contenedor.innerHTML = "<p>No hay películas disponibles para este cine.</p>";
+                return;
+            }
+
+            peliculas.forEach(pelicula => {
+                const div = document.createElement('div');
+                div.classList.add('pelicula');
+
+                div.innerHTML = `
+                    <img src="imagenes/${pelicula.imagen || 'pelicula_generica.jpg'}" alt="${pelicula.titulo}">
+                    <h3>${pelicula.titulo}</h3>
+                    <p>${pelicula.descripcion}</p>
+                    <a href="info.html?id_pelicula=${pelicula.id}&id_cine=${id_cine}" class="btn-info">INFO</a>
+                `;
+
+                contenedor.appendChild(div);
+            });
+        })
+        .catch(error => {
+            console.error('Error cargando la cartelera:', error);
+        });
+});
 

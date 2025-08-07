@@ -111,57 +111,60 @@ document.addEventListener("DOMContentLoaded", () => {
  
     const handler = new AsientosHandler();
  
-    fetch(".vscode/salas.json")
-        .then(response => response.json())
-        .then(data => {
-            const config = data[tipoSala];
- 
-            if (!config) {
-                console.error(`No hay configuración para la sala: ${tipoSala}`);
-                return;
-            }
- 
-            generarAsientos(config.filas, config.columnas, config.pasillo);
- 
-            handler.renderizarTextoAsientos();
-            handler.setupSeatEventListeners();
-        })
-        .catch(err => console.error("Error al cargar el JSON de salas:", err));
- 
-function generarAsientos(filas, columnas, pasillo) {
-    contenedorAsientos.innerHTML = "";
- 
-    for (let i = 0; i < filas; i++) {
-        const fila = document.createElement("div");
-        fila.classList.add("asientos-fila");
- 
-        const letraFila = String.fromCharCode(65 + i);
- 
-        for (let j = 1; j <= columnas; j++) {
-            // Si el pasillo es un rango (ejemplo: [7, 8])
-            if (Array.isArray(pasillo)) {
-                if (j === pasillo[0] + 1) {
-                    for (let k = pasillo[0]; k < pasillo[1]; k++) {
-                        const espacio = document.createElement("div");
-                        espacio.classList.add("asiento-espacio");
-                        fila.appendChild(espacio);
-                    }
-                }
-            }
-            // Si el pasillo es un solo número
-            else if (j === pasillo + 1) {
-                const espacio = document.createElement("div");
-                espacio.classList.add("asiento-espacio");
-                fila.appendChild(espacio);
-            }
- 
-            const asiento = document.createElement("div");
-            asiento.classList.add("asiento-box");
-            asiento.dataset.asiento = `${letraFila}${j}`;
-            fila.appendChild(asiento);
+    const funcionId = localStorage.getItem('id_funcion');
+if (!funcionId) {
+    alert("No se encontró la función seleccionada.");
+    return;
+}
+
+fetch(`obtener_asientos.php?id_funcion=${funcionId}`)
+    .then(response => response.json())
+    .then(asientos => {
+        if (!Array.isArray(asientos)) {
+            throw new Error("Respuesta inesperada del servidor.");
         }
- 
-        contenedorAsientos.appendChild(fila);
+
+        generarAsientosDesdeBD(asientos);
+        handler.renderizarTextoAsientos();
+        handler.setupSeatEventListeners();
+    })
+    .catch(err => console.error("Error al cargar asientos desde la BD:", err));
+
+
+function generarAsientosDesdeBD(asientosBD) {
+    contenedorAsientos.innerHTML = "";
+
+    const asientosPorFila = {};
+
+    // Agrupar por letra de fila
+    asientosBD.forEach(asiento => {
+        const fila = asiento.numero_asiento.charAt(0);
+        if (!asientosPorFila[fila]) asientosPorFila[fila] = [];
+        asientosPorFila[fila].push(asiento);
+    });
+
+    for (let fila in asientosPorFila) {
+        const filaDiv = document.createElement("div");
+        filaDiv.classList.add("asientos-fila");
+
+        asientosPorFila[fila].forEach(asiento => {
+            const asientoDiv = document.createElement("div");
+            asientoDiv.classList.add("asiento-box");
+            asientoDiv.dataset.asiento = asiento.numero_asiento;
+            asientoDiv.dataset.idAsiento = asiento.id;
+
+            if (!asiento.disponible) {
+                asientoDiv.classList.add("ocupado");
+                asientoDiv.innerHTML = `<span class="emoji-asiento">❌</span><span class="asiento-codigo">${asiento.numero_asiento}</span>`;
+                asientoDiv.style.pointerEvents = "none";
+            } else {
+                asientoDiv.innerHTML = `<span class="emoji-asiento">🪑</span><span class="asiento-codigo">${asiento.numero_asiento}</span>`;
+            }
+
+            filaDiv.appendChild(asientoDiv);
+        });
+
+        contenedorAsientos.appendChild(filaDiv);
     }
 }
 });
