@@ -88,10 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    fetch(`obtener-cartelera.php?id_cine=${id_cine}`)
+    fetch(`obtener_peliculas.php?id_cine=${id_cine}`)
         .then(response => response.json())
         .then(peliculas => {
-            const contenedor = document.getElementById('contenedor-cartelera'); // Asegúrate que exista en tu HTML
+            const contenedor = document.getElementById('contenedor-peliculas');
+// Asegúrate que exista en tu HTML
 
             if (!peliculas.length) {
                 contenedor.innerHTML = "<p>No hay películas disponibles para este cine.</p>";

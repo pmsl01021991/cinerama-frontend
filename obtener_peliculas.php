@@ -10,7 +10,7 @@ if (!isset($_GET['id_cine'])) {
 $id_cine = intval($_GET['id_cine']);
 
 $sql = "
-    SELECT p.id, p.titulo, p.descripcion, p.imagen
+    SELECT p.id, p.titulo, p.descripcion, p.imagen, p.trailer
     FROM pelicula p
     INNER JOIN funcion f ON p.id = f.id_pelicula
     WHERE f.id_cine = ?
