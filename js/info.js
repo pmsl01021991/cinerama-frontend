@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 class Slider {
     constructor(selector, interval = 3000) {
         this.slides = document.querySelectorAll(`${selector} .slide`);
@@ -139,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 class BtnHoraHandler {
     constructor(selector) {
         this.buttons = document.querySelectorAll(selector);
+        this.peliculasInfo = this.getPeliculasInfo(); // ✅ Agrega esta línea
         this.init();
     }
 
@@ -152,14 +155,84 @@ class BtnHoraHandler {
         const button = event.currentTarget;
 
         const horarioSeleccionado = button.getAttribute('data-hora');
-        localStorage.setItem('horarioSeleccionado', horarioSeleccionado);
-
         const tipoCine = button.getAttribute('data-cine');
+        const idFuncion = button.getAttribute('data-id-funcion'); // ✅
+
+        localStorage.setItem('horarioSeleccionado', horarioSeleccionado);
         localStorage.setItem('tipoCine', tipoCine);
+        localStorage.setItem('id_funcion', idFuncion); // ✅ Muy importante
+       
+        // Guardar la película también
+        const parametro = new URLSearchParams(window.location.search);
+        const pelicula = parametro.get('pelicula');
+
+        const dataCine = this.peliculasInfo[pelicula];
+        localStorage.setItem('dataCine', JSON.stringify(dataCine));
+
+        
 
         // Se reemplazará por id_funcion desde backend
         window.location.href = './asientos.html';
     }
+
+     // 🔽 Esta función ya la tenías, pero la necesitas dentro de la clase
+    getPeliculasInfo() {
+    return {
+        lilo: {
+            titulo: "Lilo y Stitch",
+            director: "DEAN FLEISCHER CAMP",
+            duracion: "01:48:00",
+            estreno: "2025-05-22",
+            reparto: "SYDNEY AGUDONG, MAIA KEALOHA, TIA CARRERE, ZACH GALIFIANAKIS, BILLY MAGNUSSEN",
+            sinopsis: `Remake en imagen real de "Lilo & Stitch". Narra la historia de una niña hawaiana solitaria y un extraterrestre fugitivo que la ayuda a recomponer su familia rota.`,
+            poster: "imagenes/banner1.jpg",
+            categorias: ["TODO ESPECTADOR", "ANIMADO", "CINE COLOR"],
+            trailer: "https://www.youtube.com/embed/9JIyINjMfcc",
+            sala: '01',
+            url: 'info.html?pelicula=lilo'
+        },
+        karate: {
+            titulo: "Karate Kid: Leyendas",
+            director: "JON M. CHU",
+            duracion: "02:05:00",
+            estreno: "2025-06-15",
+            reparto: "JACKIE CHAN, RALPH MACCHIO, NUEVOS ACTORES",
+            sinopsis: "Una nueva generación de Karate Kid que mezcla leyendas y jóvenes aprendices en un torneo mundial.",
+            poster: "imagenes/karatekid.jpg",
+            categorias: ["TODO ESPECTADOR", "ACCIÓN", "DRAMA"],
+            trailer: "https://www.youtube.com/embed/ZWoFMg7XVHA",
+            sala: '02',
+            url: 'info.html?pelicula=karate'
+        },
+        encerrado: {
+            titulo: "Encerrado",
+            director: "ANTHONY HOPKINS",
+            duracion: "01:50:00",
+            estreno: "2025-07-10",
+            reparto: "ANTHONY HOPKINS, OTROS ACTORES",
+            sinopsis: "Un thriller psicológico donde un grupo queda atrapado en un extraño edificio.",
+            poster: "imagenes/encerrado.jpg",
+            categorias: ["MAYORES DE 14", "THRILLER", "DRAMA"],
+            trailer: "https://www.youtube.com/embed/py7BEMruWZw",
+            sala: '03',
+            url: 'info.html?pelicula=encerrado'
+        },
+        hurry: {
+            titulo: "Hurry",
+            director: "DIRECTOR X",
+            duracion: "01:40:00",
+            estreno: "2025-08-01",
+            reparto: "ACTORES Y ACTRICES",
+            sinopsis: "Historia de una carrera contra el tiempo para salvar a una familia.",
+            poster: "imagenes/hurry.jpg",
+            categorias: ["TODO ESPECTADOR", "AVENTURA", "FAMILIAR"],
+            trailer: "https://www.youtube.com/embed/zFxDwQK0yVQ",
+            sala: '04',
+            url: 'info.html?pelicula=hurry'
+        }
+    };
 }
+}
+
 
 const btnHoraHandler = new BtnHoraHandler('.btn-hora');
