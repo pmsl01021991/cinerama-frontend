@@ -84,4 +84,18 @@ CREATE TABLE pago (
   FOREIGN KEY (id_reserva) REFERENCES reserva(id)
 );
 
+ALTER TABLE cine ADD imagen VARCHAR(255);
+
+UPDATE cine SET imagen = 'cine_cajamarca.jpg' WHERE nombre = 'Cine Cajamarca';
+UPDATE cine SET imagen = 'cine_minka.jpg'     WHERE nombre = 'Cine Minka';
+UPDATE cine SET imagen = 'cine_chimbote.jpg' WHERE nombre = 'Cine Chimbote';
+UPDATE cine SET imagen = 'cine_cuzco.jpg'     WHERE nombre = 'Cine Cuzco';
+UPDATE cine SET imagen = 'cine_huacho.jpg' WHERE nombre = 'Cine Huacho';
+UPDATE cine SET imagen = 'cine_moyobamba.jpg'     WHERE nombre = 'Cine Moyobamba';
+UPDATE cine SET imagen = 'cine_pacifico.jpg' WHERE nombre = 'Cine Pacifico';
+UPDATE cine SET imagen = 'cine_piura.jpg'     WHERE nombre = 'Cine Piura';
+UPDATE cine SET imagen = 'cine_quinde.jpg'     WHERE nombre = 'Cine Quinde';
+UPDATE cine SET imagen = 'cine_sol.jpg' WHERE nombre = 'Cine Sol';
+UPDATE cine SET imagen = 'cine_tarapoto.jpg'     WHERE nombre = 'Cine Tarapoto';
+
 

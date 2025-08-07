@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 include 'conexion.php';
 
-$sql = "SELECT id, nombre FROM cine";
+$sql = "SELECT id, nombre, direccion, imagen FROM cine";
 $resultado = $conn->query($sql);
 
 $cines = [];

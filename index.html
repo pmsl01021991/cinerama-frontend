@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="cine-header">${cine.nombre}</div>
                     <div class="cine-body">
                         <div class="cine-image">
-                            <img src="imagenes/cine_generico.jpg" alt="${cine.nombre}">
+                            <img src="imagenes/${cine.imagen || 'cine_generico.jpg'}" alt="${cine.nombre}">
                         </div>
                         <div class="cine-info">
                             <p>${cine.direccion}</p>
