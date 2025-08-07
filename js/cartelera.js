@@ -106,11 +106,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="imagenes/${pelicula.imagen || 'pelicula_generica.jpg'}" alt="${pelicula.titulo}">
                     <h3>${pelicula.titulo}</h3>
                     <p>${pelicula.descripcion}</p>
+                    <button class="btn-trailer" data-video="${pelicula.trailer}">TRAILER</button>
                     <a href="info.html?id_pelicula=${pelicula.id}&id_cine=${id_cine}" class="btn-info">INFO</a>
                 `;
 
+                // Agregar evento al botón trailer generado dinámicamente
+                const trailerBtn = div.querySelector('.btn-trailer');
+                trailerBtn.addEventListener('click', () => {
+                    const videoUrl = trailerBtn.getAttribute('data-video');
+                    trailerModal.openModal(videoUrl);
+                });
+
                 contenedor.appendChild(div);
             });
+
         })
         .catch(error => {
             console.error('Error cargando la cartelera:', error);
