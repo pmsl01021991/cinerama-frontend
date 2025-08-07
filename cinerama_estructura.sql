@@ -130,3 +130,31 @@ UPDATE cine SET imagen = 'cine_sol.jpg' WHERE nombre = 'Cine Sol';
 UPDATE cine SET imagen = 'cine_tarapoto.jpg' WHERE nombre = 'Cine Tarapoto';
 
 
+SELECT * FROM pelicula;
+
+SELECT f.*, p.titulo 
+FROM funcion f
+JOIN pelicula p ON f.id_pelicula = p.id
+WHERE f.id_cine = 1;
+
+
+INSERT INTO pelicula (titulo, descripcion, duracion, clasificacion, imagen) VALUES
+('Lilo y Stitch', 'Remake en imagen real de "Lilo & Stitch". Narra la historia de una niña hawaiana solitaria...', 108, 'TP', 'banner1.jpg'),
+('Karate Kid: Leyendas', 'Una nueva generación de Karate Kid que mezcla leyendas y jóvenes aprendices...', 125, 'TP', 'karatekid.jpg'),
+('Encerrado', 'Un thriller psicológico donde un grupo queda atrapado en un extraño edificio.', 110, '14+', 'encerrado.jpg'),
+('Hurry', 'Historia de una carrera contra el tiempo para salvar a una familia.', 100, 'TP', 'hurry.jpg');
+
+INSERT INTO funcion (id_cine, id_pelicula, fecha, hora) VALUES
+(1, 1, '2025-08-08', '18:00:00'), -- Lilo y Stitch
+(1, 2, '2025-08-08', '20:30:00'), -- Karate Kid
+(1, 3, '2025-08-09', '17:45:00'), -- Encerrado
+(1, 4, '2025-08-09', '21:00:00'); -- Hurry
+
+
+
+SELECT f.*, p.titulo 
+FROM funcion f
+JOIN pelicula p ON f.id_pelicula = p.id
+WHERE f.id_cine = 1;
+
+
