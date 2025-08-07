@@ -82,33 +82,53 @@
     <!-- Horarios -->
 
     <section class="horario">
-        <div class="horario-contenido">
-            <h2>⏱️ Horarios Disponibles</h2>
+    <div class="horario-contenido">
+        <h2>⏱️ Horarios Disponibles</h2>
 
-            <div class="horario-2d">
-                <p>Entradas Regulares</p>
-                <div class="horario-listas">
-                    <div class="btn-hora" data-hora="03:20 pm" data-cine="2D">03:20 pm</div>
-                    <div class="btn-hora" data-hora="04:00 pm" data-cine="2D">04:00 pm</div>
-                    <div class="btn-hora" data-hora="04:40 pm" data-cine="2D">04:40 pm</div>
-                    <div class="btn-hora" data-hora="06:20 pm" data-cine="2D">06:20 pm</div>
-                    <div class="btn-hora" data-hora="07:00 pm" data-cine="2D">07:00 pm</div>
-                    <div class="btn-hora" data-hora="08:40 pm" data-cine="2D">08:40 pm</div>
-                    <div class="btn-hora" data-hora="09:20 pm" data-cine="2D">09:20 pm</div>
-                    <div class="btn-hora" data-hora="10:20 pm" data-cine="2D">10:20 pm</div>
-                </div>
-            </div>
-            <div class="horario-3d">
-                <p>Entradas Regulares</p>
-                <div class="horario-listas">
-                    <div class="btn-hora" data-hora="02:10 pm" data-cine="3D">02:10 pm</div>
-                    <div class="btn-hora" data-hora="04:30 pm" data-cine="3D">04:30 pm</div>
-                    <div class="btn-hora" data-hora="06:50 pm" data-cine="3D">06:50 pm</div>
-                    <div class="btn-hora" data-hora="09:10 pm" data-cine="3D">09:10 pm</div>
-                </div>
-            </div>
-        </div>
-    </section>
+        <div class="horario-2d"> ... </div>
+        <div class="horario-3d"> ... </div>
+    </div>
+</section>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const idPelicula = params.get("id_pelicula");
+    const idCine = params.get("id_cine");
+
+    if (!idPelicula || !idCine) {
+        document.getElementById("contenedor-horarios").innerHTML = "<p>❌ Faltan datos en la URL.</p>";
+        return;
+    }
+
+    fetch(`obtener_horarios.php?id_pelicula=${idPelicula}&id_cine=${idCine}`)
+        .then(res => res.json())
+        .then(data => {
+            const contenedor = document.getElementById("contenedor-horarios");
+
+            if (data.length === 0) {
+                contenedor.innerHTML = "<p>⚠️ No hay funciones disponibles para esta película en este cine.</p>";
+                return;
+            }
+
+            data.forEach(funcion => {
+                const btn = document.createElement("button");
+                btn.classList.add("btn-hora");
+                btn.textContent = `${funcion.fecha} - ${funcion.hora}`;
+                btn.onclick = () => {
+                    window.location.href = `asientos.html?id_funcion=${funcion.id}`;
+                };
+                contenedor.appendChild(btn);
+            });
+        })
+        .catch(error => {
+            console.error("Error al cargar horarios:", error);
+            document.getElementById("contenedor-horarios").innerHTML = "<p>❌ Error al cargar horarios.</p>";
+        });
+});
+</script>
+
 
     <!-- Footer -->
     <footer>

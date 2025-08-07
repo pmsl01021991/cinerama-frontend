@@ -34,63 +34,101 @@
         <h2>Elige una forma de Pago</h2>
 
         <!-- ✅ Formulario -->
-        <form id="form-pago">
-            <input type="text" id="nombre" placeholder="Nombre completo" />
-            <input type="email" id="correo" placeholder="Correo electrónico" />
+        <form id="form-pago" action="registrar_pago.php" method="POST">
+        <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" required />
+        <input type="email" id="correo" name="correo" placeholder="Correo electrónico" required />
 
-            <div class="metodo-pago">
-                <label>
-                    <input type="radio" name="metodo" value="tarjeta" />
-                    Tarjeta de Crédito o Débito
-                    <div class="iconos">
-                        <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa"/>
-                        <img src="https://img.icons8.com/color/48/000000/mastercard.png" alt="Mastercard"/>
-                        <img src="https://img.icons8.com/color/48/000000/amex.png" alt="Amex"/>
-                    </div>
-                </label>
+        <div class="metodo-pago">
+            <label>
+            <input type="radio" name="metodo" value="tarjeta" onclick="setMetodoPago('tarjeta')" />
+            Tarjeta de Crédito o Débito
+            <div class="iconos">
+                <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa" />
+                <img src="https://img.icons8.com/color/48/000000/mastercard.png" alt="Mastercard" />
+                <img src="https://img.icons8.com/color/48/000000/amex.png" alt="Amex" />
+            </div>
+            </label>
 
-                <label>
-                    <input type="radio" name="metodo" value="billetera" />
-                    Billeteras Electrónicas
-                </label>
+            <label>
+            <input type="radio" name="metodo" value="billetera" onclick="setMetodoPago('billetera')" />
+            Billeteras Electrónicas
+            </label>
 
-                <div id="billeteras-detalle" class="billeteras" style="display: none;">
-                    <select id="tipo-doc">
-                        <option value="">Tipo de documento</option>
-                        <option value="dni">DNI</option>
-                        <option value="ce">Carnet de Extranjería</option>
-                        <option value="pasaporte">Pasaporte</option>
-                    </select>
-                    <input type="text" id="numero-doc" placeholder="Número de documento" />
-                    <input type="text" id="telefono" placeholder="Número de Celular" />
+            <div id="billeteras-detalle" class="billeteras" style="display: none;">
+            <select id="tipo-doc">
+                <option value="">Tipo de documento</option>
+                <option value="dni">DNI</option>
+                <option value="ce">Carnet de Extranjería</option>
+                <option value="pasaporte">Pasaporte</option>
+            </select>
+            <input type="text" id="numero-doc" placeholder="Número de documento" />
+            <input type="text" id="telefono" placeholder="Número de Celular" />
 
-                    <p>Elige alguna de las opciones de pago:</p>
-                    <div class="billeteras-opciones">
-                        <img src="/imagenes/Yape.png" alt="Yape" class="opcion-pago" data-billetera="Yape"/>
-                        <img src="/imagenes/Plin.png" alt="Plin" class="opcion-pago" data-billetera="Plin"/>
-                    </div>
-
-                    <div id="yapeImagenContainer" style="display:none; text-align:center;">
-                    <img src="/imagenes/QR-Yape.jpg" alt="QR Yape" class="qr-pago">
-                    </div>
-
-                    <div id="plinImagenContainer" style="display:none; text-align:center;">
-                        <img src="/imagenes/QR-Plin.jpg" alt="QR Plin" class="qr-pago">
-                    </div>
-
-                    
-
-                    <!-- ✅ Campo oculto para billetera -->
-                    <input type="hidden" id="billetera-usada" value="">
-                </div>
+            <p>Elige alguna de las opciones de pago:</p>
+            <div class="billeteras-opciones">
+                <img src="/imagenes/Yape.png" alt="Yape" class="opcion-pago" data-billetera="Yape" />
+                <img src="/imagenes/Plin.png" alt="Plin" class="opcion-pago" data-billetera="Plin" />
             </div>
 
-            <p class="nota">* No se hacen cambios ni devoluciones<br>
+            <div id="yapeImagenContainer" style="display:none; text-align:center;">
+                <img src="/imagenes/QR-Yape.jpg" alt="QR Yape" class="qr-pago" />
+            </div>
+
+            <div id="plinImagenContainer" style="display:none; text-align:center;">
+                <img src="/imagenes/QR-Plin.jpg" alt="QR Plin" class="qr-pago" />
+            </div>
+
+            <!-- ✅ Campo oculto para billetera seleccionada -->
+            <input type="hidden" id="billetera-usada" name="billetera_usada" value="">
+            </div>
+        </div>
+
+        <!-- ✅ Campos ocultos adicionales para el backend -->
+        <input type="hidden" id="metodo_pago" name="metodo_pago" value="">
+        <input type="hidden" id="id_funcion" name="id_funcion">
+        <input type="hidden" id="id_asiento" name="id_asiento">
+
+        <p class="nota">* No se hacen cambios ni devoluciones<br>
             * Toda la información de pago es segura</p>
 
-            <button type="submit" id="btn-pagar">Pagar</button>
+        <button type="submit" id="btn-pagar">Pagar</button>
         </form>
+
     </div>
+
+    <script>
+  // Leer parámetros de URL (por ejemplo: pago.html?id_funcion=4&id_asiento=8)
+  const urlParams = new URLSearchParams(window.location.search);
+  document.getElementById('id_funcion').value = urlParams.get('id_funcion') || '';
+  document.getElementById('id_asiento').value = urlParams.get('id_asiento') || '';
+
+  // Captura método de pago
+  function setMetodoPago(valor) {
+    document.getElementById('metodo_pago').value = valor;
+    const billeteras = document.getElementById('billeteras-detalle');
+    if (valor === 'billetera') {
+      billeteras.style.display = 'block';
+    } else {
+      billeteras.style.display = 'none';
+      document.getElementById('billetera-usada').value = '';
+      document.getElementById('yapeImagenContainer').style.display = 'none';
+      document.getElementById('plinImagenContainer').style.display = 'none';
+    }
+  }
+
+  // Manejar selección de billetera
+  document.querySelectorAll('.opcion-pago').forEach(img => {
+    img.addEventListener('click', () => {
+      const billetera = img.dataset.billetera;
+      document.getElementById('billetera-usada').value = billetera;
+
+      // Mostrar el QR correspondiente
+      document.getElementById('yapeImagenContainer').style.display = (billetera === 'Yape') ? 'block' : 'none';
+      document.getElementById('plinImagenContainer').style.display = (billetera === 'Plin') ? 'block' : 'none';
+    });
+  });
+</script>
+
 
     <!-- Espacio de separación -->
     <div style="height: 2rem;"></div>

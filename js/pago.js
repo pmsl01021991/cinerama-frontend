@@ -27,6 +27,9 @@ class PagoFormHandler {
             return;
         }
 
+        
+        document.getElementById("metodo_pago").value = metodoSeleccionado.value;
+
         if (metodoSeleccionado.value === "billetera") {
             const tipoDoc = document.getElementById("tipo-doc").value;
             const numeroDoc = document.getElementById("numero-doc").value;
@@ -38,6 +41,7 @@ class PagoFormHandler {
                 return;
             }
         }
+
 
         // ✅ Mostrar solo mensaje sin enviar al backend
         alert("¡Tus datos han sido enviados!");
