@@ -94,6 +94,73 @@
             </div>
         </section>
     </article>
+
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const idFuncion = params.get("id_funcion");
+
+    const contenedor = document.querySelector("#asientos-container");
+    const btnContinuar = document.getElementById("btn-continuar");
+    const spanButacas = document.getElementById("butacas-seleccionadas");
+    const spanTotalEntradas = document.getElementById("total-entrada");
+    const spanTotalPagar = document.getElementById("total-pagar");
+
+    let asientoSeleccionado = null;
+    const precioEntrada = 15.00;
+
+    if (!idFuncion) {
+        contenedor.innerHTML = "<p>❌ No se especificó la función.</p>";
+        return;
+    }
+
+    fetch(`obtener_asientos.php?id_funcion=${idFuncion}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.length === 0) {
+                contenedor.innerHTML = "<p>❌ No hay asientos disponibles.</p>";
+                return;
+            }
+
+            contenedor.innerHTML = ""; // Limpiar
+
+            data.forEach(asiento => {
+                const btn = document.createElement("button");
+                btn.classList.add("asiento");
+                btn.textContent = asiento.numero_asiento;
+                btn.dataset.id = asiento.id;
+
+                if (!asiento.disponible) {
+                    btn.disabled = true;
+                    btn.classList.add("ocupado");
+                } else {
+                    btn.classList.add("disponible");
+                    btn.addEventListener("click", () => {
+                        // Deseleccionar otros
+                        document.querySelectorAll(".asiento.seleccionado").forEach(b => b.classList.remove("seleccionado"));
+                        btn.classList.add("seleccionado");
+                        asientoSeleccionado = asiento.id;
+                        btnContinuar.disabled = false;
+
+                        // Actualizar resumen
+                        spanButacas.textContent = asiento.numero_asiento;
+                        spanTotalEntradas.textContent = "1";
+                        spanTotalPagar.textContent = "S/ " + precioEntrada.toFixed(2);
+                    });
+                }
+
+                contenedor.appendChild(btn);
+            });
+        });
+
+    btnContinuar.addEventListener("click", () => {
+        if (asientoSeleccionado) {
+            window.location.href = `pago.html?id_funcion=${idFuncion}&id_asiento=${asientoSeleccionado}`;
+        }
+    });
+});
+</script>
+
  
     <!-- Footer -->
     <footer>

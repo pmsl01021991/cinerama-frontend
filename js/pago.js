@@ -15,49 +15,72 @@ class PagoFormHandler {
         this.btnPagar.addEventListener("click", (e) => this.procesarPago(e));
     }
 
-    async procesarPago(e) {
-        e.preventDefault();
+async procesarPago(e) {
+    e.preventDefault();
 
-        const metodoSeleccionado = document.querySelector('input[name="metodo"]:checked');
-        const nombre = document.getElementById("nombre").value;
-        const correo = document.getElementById("correo").value;
+    const metodoSeleccionado = document.querySelector('input[name="metodo"]:checked');
+    const nombre = document.getElementById("nombre").value;
+    const correo = document.getElementById("correo").value;
 
-        if (!nombre || !correo || !metodoSeleccionado) {
-            alert("Por favor complete todos los campos y seleccione un método de pago.");
+    if (!nombre || !correo || !metodoSeleccionado) {
+        alert("Por favor complete todos los campos y seleccione un método de pago.");
+        return;
+    }
+
+    const datos = {
+        nombre,
+        correo,
+        metodo_pago: metodoSeleccionado.value
+    };
+
+    if (metodoSeleccionado.value === "billetera") {
+        const tipoDoc = document.getElementById("tipo-doc").value;
+        const numeroDoc = document.getElementById("numero-doc").value;
+        const telefono = document.getElementById("telefono").value;
+        const billeteraUsada = document.getElementById("billetera-usada").value;
+
+        if (!tipoDoc || !numeroDoc || !telefono || !billeteraUsada) {
+            alert("Por favor complete los datos de la billetera.");
             return;
         }
 
-        if (metodoSeleccionado.value === "billetera") {
-            const tipoDoc = document.getElementById("tipo-doc").value;
-            const numeroDoc = document.getElementById("numero-doc").value;
-            const telefono = document.getElementById("telefono").value;
-            const billeteraUsada = document.getElementById("billetera-usada").value;
-
-            if (!tipoDoc || !numeroDoc || !telefono || !billeteraUsada) {
-                alert("Por favor complete los datos de la billetera.");
-                return;
-            }
-        }
-
-        // ✅ Mostrar solo mensaje sin enviar al backend
-        alert("¡Tus datos han sido enviados!");
-
-        // Limpiar formulario
-        document.getElementById("form-pago").reset();
-        this.billeterasDetalle.style.display = "none";
-
-        const billeteras = document.querySelectorAll('.opcion-pago');
-        billeteras.forEach(i => i.classList.remove('seleccionada'));
-        document.getElementById("billetera-usada").value = '';
+        // Agregar al objeto para enviar
+        datos.tipo_doc = tipoDoc;
+        datos.numero_doc = numeroDoc;
+        datos.telefono = telefono;
+        datos.billetera = billeteraUsada;
     }
 
-    toggleBilleterasDetalle(radio) {
-        if (radio.value === "billetera") {
-            this.billeterasDetalle.style.display = "block";
+    // ⬇️ Aquí es donde se envía al PHP
+    try {
+        const response = await fetch('registrar_pago.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        });
+
+        const resultado = await response.json();
+
+        if (resultado.success) {
+            alert("✅ ¡Pago registrado con éxito!");
         } else {
-            this.billeterasDetalle.style.display = "none";
+            alert("❌ Error: " + resultado.message);
         }
+
+    } catch (error) {
+        console.error("Error de red o del servidor:", error);
+        alert("❌ Hubo un problema al registrar el pago.");
     }
+
+    // Limpiar formulario
+    document.getElementById("form-pago").reset();
+    this.billeterasDetalle.style.display = "none";
+
+    document.querySelectorAll('.opcion-pago').forEach(i => i.classList.remove('seleccionada'));
+    document.getElementById("billetera-usada").value = '';
+}
 }
 
 

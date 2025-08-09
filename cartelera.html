@@ -42,46 +42,57 @@
     <!-- Sección Cartelera -->
     <section id="cartelera">
         <h2>Cartelera Actual</h2>
-
-        <div class="peliculas">
-            <!-- Película 1 -->
-            <div class="pelicula">
-                <img src="imagenes/banner1.jpg" alt="Película 1">
-                <div>
-                    <button class="btn-trailer" data-video="https://www.youtube.com/embed/9JIyINjMfcc">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=lilo" class="btn-info">INFO</a>
-
-                </div>
-            </div>
-
-            <!-- Película 2 -->
-            <div class="pelicula">
-                <img src="imagenes/karatekid.jpg" alt="Película 2">
-                <div>
-                    <button class="btn-trailer" data-video="https://www.youtube.com/embed/ZWoFMg7XVHA">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=karate" class="btn-info">INFO</a>
-                </div>
-            </div>
-            
-            <!-- Película 3 -->
-            <div class="pelicula">
-                <img src="imagenes/encerrado.jpg" alt="Película 3">
-                <div>
-                    <button class="btn-trailer"data-video="https://www.youtube.com/embed/py7BEMruWZw">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=encerrado" class="btn-info">INFO</a>
-                </div>
-            </div>
-
-            <!-- Película 4 -->
-            <div class="pelicula">
-                <img src="imagenes/hurry.jpg" alt="Película 4">
-                <div>
-                    <button class="btn-trailer" data-video="https://www.youtube.com/embed/zFxDwQK0yVQ">🎬 TRAILER</button>
-                    <a href="info.html?pelicula=hurry" class="btn-info">INFO</a>
-                </div>
-            </div>
-        </div>
+        <div class="peliculas" id="contenedor-peliculas">
+            <!-- Aquí se mostrarán dinámicamente las películas -->
+        </div>  
     </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            const idCine = params.get("id_cine");
+
+            if (!idCine) {
+                document.getElementById("contenedor-peliculas").innerHTML = "<p>Error: Cine no especificado.</p>";
+                return;
+            }
+
+            fetch(`obtener_peliculas.php?id_cine=${idCine}`)
+                .then(res => res.json())
+                .then(data => {
+                    const contenedor = document.getElementById("contenedor-peliculas");
+
+                    if (data.length === 0) {
+                        contenedor.innerHTML = "<p>No hay películas disponibles para este cine.</p>";
+                        return;
+                    }
+
+                    data.forEach(pelicula => {
+                        const div = document.createElement("div");
+                        div.classList.add("pelicula");
+
+                        div.innerHTML = `
+                            <div style="position: relative;">
+                                <img src="imagenes/${pelicula.imagen || 'pelicula_generica.jpg'}" alt="${pelicula.titulo}">
+                                
+                            </div>
+                            <div class="botones" style="margin-top: 10px;">
+                                <a href="${pelicula.trailer || '#'}" class="btn-trailer" target="_blank">🎬 TRAILER</a>
+                                <a href="info.html?id_pelicula=${pelicula.id}&id_cine=${idCine}" class="btn-info">INFO</a>
+                            </div>
+                        `;
+
+                        contenedor.appendChild(div);
+                    });
+
+                })
+                .catch(err => {
+                    document.getElementById("contenedor-peliculas").innerHTML = "<p>Error cargando películas.</p>";
+                    console.error(err);
+                });
+        });
+        </script>
+
 
     
     <!-- Footer -->
