@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Panel de Reservaciones</title>
-  <link rel="stylesheet" href="Login.css">
-  <script src="js/login.js" defer></script>
+  <link rel="stylesheet" href="css/reservaciones.css" />
+  <script src="js/auth.js" defer></script>
+  <script src="js/login.js" defer></script> <!-- si aquí reusas cerrar sesión -->
 </head>
-<body>
-  <h1>Reservaciones de Asientos 🎬</h1>
-  <button id="cerrarSesionBtn">Cerrar Sesión</button>
+<body data-require-admin="true">
+  <div class="container">
+    <h1>Reservaciones de Asientos 🎬</h1>
+    <button id="cerrarSesionBtn" data-admin-only hidden>Cerrar Sesión</button>
 
-  <div id="contenedor-reservaciones">
-    <p>Aquí se mostrarán las reservaciones...</p>
+    <div id="contenedor-reservaciones">
+      <p>Aquí se mostrarán las reservaciones...</p>
+    </div>
   </div>
 </body>
 </html>
