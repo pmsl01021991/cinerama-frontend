@@ -1,10 +1,18 @@
 // js/login.js
 
-// Inicializa EmailJS SOLO en la página de login (evita warnings en otras páginas)
+// Inicializa EmailJS SOLO en la página de login
 document.addEventListener("DOMContentLoaded", () => {
   const isLoginPage = !!document.getElementById("LoginForm");
   if (isLoginPage && window.emailjs && typeof emailjs.init === "function") {
     try { emailjs.init("nFJQXJun_0mdXBQ6U"); } catch (_) {}
+  }
+
+  // Validación de acceso administrador con modal
+  const requireAdmin = document.body?.dataset?.requireAdmin === "true";
+  if (requireAdmin && localStorage.getItem("adminLogeado") !== "true") {
+    // Guardamos un flag para mostrar el modal en index.html
+    localStorage.setItem("showRestrictedModal", "true");
+    window.location.href = "index.html";
   }
 });
 
@@ -36,104 +44,88 @@ class LoginForm {
   }
 
   enviarFormulario() {
-    if (this.loading) return; // evita doble click
+  if (this.loading) return;
 
-    const user = (this.usuarioInput?.value || "").trim();
-    const pass = (this.passwordInput?.value || "").trim();
+  const user = (this.usuarioInput?.value || "").trim();
+  const pass = (this.passwordInput?.value || "").trim();
 
-    if (!user || !pass) {
-      this.mensajeError.textContent = "Por favor completa todos los campos.";
-      return;
-    }
-
-    // Verifica que el captcha esté cargado
-    if (typeof grecaptcha === "undefined") {
-      this.mensajeError.textContent = "No se pudo cargar el captcha. Recarga la página.";
-      return;
-    }
-
-    // Token del reCAPTCHA v2 (checkbox)
-    const token = grecaptcha.getResponse();
-    if (!token) {
-      this.mensajeError.textContent = "Completa el captcha.";
-      return;
-    }
-
-    this.setLoading(true);
-    this.mensajeError.textContent = "";
-
-    // Si sirves el frontend desde el mismo backend (http://localhost:3001), usa ruta relativa:
-    const url = "/api/auth/login";
-    // Si usas Live Server, usa: const url = "http://localhost:3001/api/auth/login";
-
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        usuario: user,
-        password: pass,
-        "g-recaptcha-response": token, // nombre estándar
-      }),
-    })
-      .then(async (res) => {
-        const text = await res.text();
-
-        if (res.ok && text === "OK") {
-          localStorage.setItem("adminLogeado", "true");
-          try { grecaptcha.reset(); } catch (_) {}
-          // 👉 redirige al inicio después del login exitoso
-          window.location.href = "index.html";
-          return;
-        }
-
-        // Falló login o captcha
-        const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
-        intentos.push({ usuario: user, fecha: new Date().toLocaleString() });
-        localStorage.setItem("intentosFallidos", JSON.stringify(intentos));
-        localStorage.setItem("showRestrictedToast", "true");
-
-        // Notificación opcional (solo si EmailJS está cargado)
-        if (window.emailjs && typeof emailjs.send === "function") {
-          emailjs
-            .send("service_xpopdts", "template_n0qugjq", {
-              usuario: user,
-              fecha: new Date().toLocaleString(),
-            })
-            .catch((err) => console.error("❌ Error EmailJS:", err));
-        }
-
-        this.mensajeError.textContent = text || "Login inválido";
-        try { grecaptcha.reset(); } catch (_) {}
-
-        // (ya NO redirigimos en fallo; te quedas en login viendo el error)
-        // window.location.href = "index.html";
-      })
-      .catch((err) => {
-        console.error("❌ Fetch error:", err);
-        this.mensajeError.textContent = "Error de conexión.";
-        try { grecaptcha.reset(); } catch (_) {}
-      })
-      .finally(() => this.setLoading(false));
+  if (!user || !pass) {
+    this.mensajeError.textContent = "Por favor completa todos los campos.";
+    return;
   }
+
+  if (typeof grecaptcha === "undefined") {
+    this.mensajeError.textContent = "No se pudo cargar el captcha. Recarga la página.";
+    return;
+  }
+
+  const token = grecaptcha.getResponse();
+  if (!token) {
+    this.mensajeError.textContent = "Completa el captcha.";
+    return;
+  }
+
+  this.setLoading(true);
+this.mensajeError.textContent = "";
+
+// Usuario administrador hardcodeado
+const adminUser = "admin@cinerama.com";
+const adminPass = "pmsl123";
+
+// Si el usuario NO es admin, redirigir con modal
+if (user !== adminUser || pass !== adminPass) {
+  localStorage.setItem("showRestrictedModal", "true");
+  try { grecaptcha.reset(); } catch (_) {}
+  window.location.href = "index.html";
+  return; // detener ejecución del login
 }
 
-// IMPORTANTE: tu form tiene id="LoginForm"
+// Si es admin, proceder con el fetch normal
+const url = "/api/auth/login"; 
+fetch(url, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    usuario: user,
+    password: pass,
+    "g-recaptcha-response": token,
+  }),
+})
+  .then(async (res) => {
+    const text = await res.text();
+
+    if (res.ok && text === "OK") {
+      localStorage.setItem("adminLogeado", "true");
+      try { grecaptcha.reset(); } catch (_) {}
+      window.location.href = "index.html";
+      return;
+    }
+
+    // Si falla login
+    const intentos = JSON.parse(localStorage.getItem("intentosFallidos")) || [];
+    intentos.push({ usuario: user, fecha: new Date().toLocaleString() });
+    localStorage.setItem("intentosFallidos", JSON.stringify(intentos));
+    this.mensajeError.textContent = text || "Login inválido";
+    try { grecaptcha.reset(); } catch (_) {}
+  })
+  .catch((err) => {
+    console.error("❌ Fetch error:", err);
+    this.mensajeError.textContent = "Error de conexión.";
+    try { grecaptcha.reset(); } catch (_) {}
+  })
+  .finally(() => this.setLoading(false));
+
+}
+
+}
+
 new LoginForm("#LoginForm");
 
+// Panel de administración
 class AdminPanel {
   constructor() {
     this.logoutButton = document.getElementById("cerrarSesionBtn");
-    this.validarAcceso();
     this.initEventos();
-  }
-
-  validarAcceso() {
-    // Solo redirige si la página lo requiere explícitamente
-    const requireAdmin = document.body?.dataset?.requireAdmin === "true";
-    if (requireAdmin && localStorage.getItem("adminLogeado") !== "true") {
-      alert("Acceso denegado");
-      window.location.href = "login.html";
-    }
   }
 
   initEventos() {
@@ -148,7 +140,45 @@ class AdminPanel {
   }
 }
 
-// Inicializa panel admin solo si existe el botón
 if (document.getElementById("cerrarSesionBtn")) {
   new AdminPanel();
 }
+
+// Mostrar modal de acceso restringido en index.html
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("showRestrictedModal") === "true") {
+    localStorage.removeItem("showRestrictedModal");
+
+    // Crear modal simple
+    const modal = document.createElement("div");
+    modal.id = "restrictedModal";
+    modal.style.position = "fixed";
+    modal.style.top = "0";
+    modal.style.left = "0";
+    modal.style.width = "100%";
+    modal.style.height = "100%";
+    modal.style.background = "rgba(0,0,0,0.5)";
+    modal.style.display = "flex";
+    modal.style.alignItems = "center";
+    modal.style.justifyContent = "center";
+    modal.style.zIndex = "9999";
+
+    const content = document.createElement("div");
+    content.style.background = "#fff";
+    content.style.padding = "2rem";
+    content.style.borderRadius = "8px";
+    content.style.textAlign = "center";
+    content.innerHTML = `
+      <h2>⚠️ Cuidado</h2>
+      <p>Acceso restringido. Solo administradores pueden entrar.</p>
+      <button id="closeModalBtn" style="margin-top:1rem;padding:0.5rem 1rem;">Cerrar</button>
+    `;
+
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+      modal.remove();
+    });
+  }
+});
