@@ -93,10 +93,23 @@ class ContactFormHandler {
             return;
         }
 
-        // Si todo está bien → simulación de envío
+        // Guardar en localStorage para el panel de administración
+        const mensajeObj = {
+            nombre,
+            apellidos,
+            email,
+            asunto,
+            cine,
+            mensaje,
+            fecha: new Date().toLocaleString()
+        };
+        const mensajesGuardados = JSON.parse(localStorage.getItem("mensajesContacto") || "[]");
+        mensajesGuardados.push(mensajeObj);
+        localStorage.setItem("mensajesContacto", JSON.stringify(mensajesGuardados));
+
+        // Feedback al usuario
         const textoMensaje = '¡Tus datos han sido enviados correctamente!';
         this.showToast(`${textoMensaje} 🎉`, '#28a745');  // color verde
-        // 🔥 Reproducir TU AUDIO personalizado
         const audio = document.getElementById('audio-enviado');
         audio.play();
         this.contactForm.reset();
@@ -113,24 +126,27 @@ class ContactFormHandler {
         toast.style.backgroundColor = color;
         toast.className = 'toast show';
 
-        // Oculta el toast después de 3 segundos
+        // Oculta el toast después de 5 segundos
         setTimeout(() => {
             toast.className = 'toast';
         }, 5000);
     }
 
-    reproducirMensaje(texto) { // 🔥 método dentro de la clase
+    reproducirMensaje(texto) {
         const mensaje = new SpeechSynthesisUtterance(texto);
-        mensaje.lang = 'es-ES'; // idioma español
-        mensaje.rate = 1; // velocidad normal
+        mensaje.lang = 'es-ES';
+        mensaje.rate = 1;
         window.speechSynthesis.speak(mensaje);
     }
 
-    showMessage(message, color) { // no te olvides de este método
+    showMessage(message, color) {
         this.formMessage.style.color = color;
         this.formMessage.textContent = message;
     }
 }
 
-// Cómo usarla:
+// Inicializar la clase
 const contactFormHandler = new ContactFormHandler('contactForm', 'formMessage');
+
+
+
