@@ -5,7 +5,6 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import authRouter from "./routes/auth.js";
-// server.js
 import { testConnection } from "./db/pool.js";
 
 
