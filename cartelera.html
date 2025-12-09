@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cartelera</title>
+    <link rel="stylesheet" href="css/cartelera.css" />
+    <link rel="stylesheet" href="css/logo.css" />
+    <script src="js/cartelera.js" defer></script>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">CINERAMA</div>
+        
+        <!-- Botón Hamburguesa -->
+        <div class="hamburger">☰</div>
+
+        <nav id="nav-menu" class="nav-menu">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="estrenos.html">Estrenos</a></li>
+                <li><a href="contacto.html">Contáctenos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="slider">
+        <div class="slide active">
+            <img src="imagenes/banner1.jpg" alt="Banner 1">
+        </div>
+        <div class="slide">
+            <img src="imagenes/banner2.webp" alt="Banner 2">
+        </div>
+        <div class="slide">
+            <img src="imagenes/banner3.jpg" alt="Banner 3">
+        </div>
+    </section>
+
+    
+
+    <!-- Sección Cartelera -->
+    <section id="cartelera">
+        <h2>Cartelera Actual</h2>
+
+        <div class="peliculas">
+            <!-- Película 1 -->
+            <!-- Película 1 -->
+            <div class="pelicula">
+                <img src="imagenes/estrenos/CHAVIN_DE_HUANTAR.jpg" alt="Chavín de Huántar">
+                <div>
+                    <button class="btn-trailer"
+                            data-video="https://www.youtube.com/embed/12mqyFbUo6Q">🎬 TRAILER</button>
+                    <a href="info.html?pelicula=chavin" class="btn-info">INFO</a>
+                </div>
+            </div>
+
+            <!-- Película 2 -->
+            <div class="pelicula">
+                <img src="imagenes/hurry.jpg" alt="Hurry">
+                <div>
+                    <button class="btn-trailer"
+                            data-video="https://www.youtube.com/embed/ZWoFMg7XVHA">🎬 TRAILER</button>
+                    <a href="info.html?pelicula=hurry" class="btn-info">INFO</a>
+                </div>
+            </div>
+
+            <!-- Película 3 -->
+            <div class="pelicula">
+                <!-- te recomiendo renombrar el archivo a zootopia2.jpg para evitar el espacio -->
+                <img src="imagenes/estrenos/zootopia2.jpg" alt="Zootopia 2">
+                <div>
+                    <button class="btn-trailer"
+                            data-video="https://www.youtube.com/embed/A-7RMaQaygI">🎬 TRAILER</button>
+                    <a href="info.html?pelicula=zootopia2" class="btn-info">INFO</a>
+                </div>
+            </div>
+
+            <!-- Película 4 -->
+            <div class="pelicula">
+                <img src="imagenes/estrenos/NADAESLOQUEPARECE.jpg" alt="Nada es lo que parece 3">
+                <div>
+                    <button class="btn-trailer"
+                            data-video="https://www.youtube.com/embed/wDJ2L37Xn94">🎬 TRAILER</button>
+                    <a href="info.html?pelicula=nada3" class="btn-info">INFO</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Redes Sociales</h3>
+                <ul class="social-links">
+                    <li><a href="https://www.facebook.com/" target="_blank">Facebook</a></li>
+                    <li><a href="https://www.facebook.com/TwitterInc/?locale=es_LA" target="_blank">Twitter</a></li>
+                    <li><a href="https://www.instagram.com/accounts/login/?source=auth_switcher&locale=es_ES"
+                            target="_blank">Instagram</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p>📞 Teléfono: <a href="tel:967356714">967356714</a></p>
+                <p>📧 Email: <a href="mailto:info@empresa.com">info@empresa.com</a></p>
+                <p>📍 Dirección: Calle Ejemplo 123, Ciudad, País</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="quick-links">
+                    <a href="#inicio" class="scroll-suave">Inicio</a>
+                   
+                    
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <b>
+                <marquee>
+                    <p>&copy; 2025 Mi Empresa. Todos los derechos son reservados.</p>
+                </marquee>
+            </b>
+        </div>
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const reservaId = localStorage.getItem("reservaId");
+        const cine = localStorage.getItem("cineSeleccionado");
+
+        if (!reservaId || !cine) {
+            alert("Primero debes elegir un cine.");
+            window.location.href = "index.html#cines";
+        }
+    });
+    </script>
+
+
+    </footer>
+
+    <!-- Modal para el trailer -->
+        <div id="trailerModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <iframe id="trailerVideo" width="560" height="315" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+        </div>
+
+</body>
+</html>

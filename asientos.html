@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asientos</title>
+    <link rel="stylesheet" href="css/asientos.css">
+    <script src="https://kit.fontawesome.com/f00de90934.js" crossorigin="anonymous"></script>
+    <script src="js/asientos.js" defer></script>
+</head>
+<body>
+ 
+    <!-- Header -->
+    <header>
+        <div id="btn-atras" class="btn-atras">
+            <i class="fa-solid fa-arrow-left"></i>Atrás
+        </div>
+        <div class="logo">CINERAMA</div>
+    </header>
+ 
+    <!-- Modal de salir de la compra -->
+    <section id="modal-alert-salir" class="modal-alert-salir remove">
+        <div class="modal-alert-contenido">
+            <div class="alert-salir-texto">
+                <h2>¡Espera!</h2>
+                <h3>¿Está seguro de salir de su proceso de compra?</h3>
+                <p>Perderá todo lo seccionado</p>
+            </div>
+            <div class="alert-salir-button">
+                <button id="alerta-confirmar">Confirmar</button>
+                <button id="alerta-continuar">Continuar</button>
+            </div>
+        </div>
+    </section>
+ 
+    <article id="asiento-article">
+        <section class="pelicula-info">
+            <div class="pelicula-info-img">
+                <img id="img-pelicula" class="img-pelicula" src="" alt="pelicula-img"> <!-- Imagen -->
+            </div>
+            <div class="pelicula-info-text">
+                <h2 id="titulo" class="titulo"></h2> <!-- Titulo-->
+                <p id="tipo-pelicula" class="tipo-pelicula"></p> <!-- Tipo de Cine 2D || 3D -->
+                <p id="fecha-actual" class="fecha-actual"></p> <!-- Fecha actual -->
+                <p id="hora" class="hora"></p> <!-- Hora -->
+                <p id="sala" class="sala"></p> <!-- Sala -->
+            </div>
+        </section>
+       
+        <section class="asientos" id="asientos">
+            <div class="asientos-contenido">
+                <div class="asientos-pantalla">
+                    <p>Pantalla</p>
+                    <div class="pantalla"></div>
+                </div>
+                <div class="asientos-all">
+                    <!-- Los asientos se generarán dinámicamente con JS -->
+                </div>
+                <div class="asientos-all" id="asientos-container">
+                    <div class="asiento-info-disponible">
+                        <div class="item-info-disponible"></div>
+                        <p>Disponible</p>
+                    </div>
+                    <div class="asiento-info-seleccionada">
+                        <div class="item-info-seleccionada"></div>
+                        <p>Seleccionada</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+       
+ 
+        <section class="pago-info">
+            <div class="pago-info-all">
+                <div class="pago-info-aviso">
+                    <h3>Importante</h3>
+                    <ul>
+                        <li>Solo alimentos comprados en el cine permitidos</li>
+                        <li>Prohibido ingresar comida externa</li>
+                        <li>Películas +18: Exclusivo para mayores de edad</li>
+                    </ul>
+                </div>
+                <div class="pago-info-contenido">
+                    <h2>Detalles de su compra</h2>
+                    <p class="pago-info-text">Total de entradas : <span id="total-entrada">0</span></p>
+                    <p class="pago-info-text">Butacas seleccionadas : <span id="butacas-seleccionadas"></span></p>
+                    <p class="pago-info-text">Productos seleccionados : <span id="productos-seleccionados"></span></p>
+                    <div class="linea"></div>
+                    <p id="total-pagar" class="total-pagar">0.00</p>
+                </div>
+            </div>
+            <div class="pago-info-button">
+                <button id="btn-continuar" class="bloquear" disabled>Continuar<i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </section>
+    </article>
+ 
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Redes Sociales</h3>
+                <ul class="social-links">
+                    <li><a href="https://www.facebook.com/" target="_blank">Facebook</a></li>
+                    <li><a href="https://www.facebook.com/TwitterInc/?locale=es_LA" target="_blank">Twitter</a></li>
+                    <li><a href="https://www.instagram.com/accounts/login/?source=auth_switcher&locale=es_ES"
+                            target="_blank">Instagram</a></li>
+                </ul>
+            </div>
+ 
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p>📞 Teléfono: <a href="tel:967356714">967356714</a></p>
+                <p>📧 Email: <a href="mailto:info@empresa.com">info@empresa.com</a></p>
+                <p>📍 Dirección: Calle Ejemplo 123, Ciudad, País</p>
+            </div>
+ 
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="quick-links">
+                    <a href="#inicio" class="scroll-suave">Inicio</a>
+                    
+                   
+                </ul>
+            </div>
+        </div>
+ 
+        <div class="footer-bottom">
+            <b>
+                <marquee>
+                    <p>&copy; 2025 Mi Empresa. Todos los derechos son reservados.</p>
+                </marquee>
+            </b>
+        </div>
+ 
+    </footer>
+ 
+   
+</body>
+</html>

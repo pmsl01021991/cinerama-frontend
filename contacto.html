@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Contacto - Cinerama</title>
+    <link rel="stylesheet" href="css/contacto.css" />
+    <script src="js/contacto.js" defer></script>
+    
+
+</head>
+<body>
+    
+    <!-- Header -->
+    <header>
+        <div class="logo">CINERAMA</div>
+        
+        <!-- Botón Hamburguesa -->
+        <div class="hamburger">☰</div>
+
+        <nav id="nav-menu" class="nav-menu">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="estrenos.html">Estrenos</a></li>
+                <li><a href="cartelera.html">Cartelera</a></li>
+                <!-- SOLO ADMIN: visible cuando adminLogeado === "true" -->
+                <li><a href="reservaciones.html" data-admin-only hidden>Panel (Admin)</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="slider">
+        <div class="slide active">
+            <img src="imagenes/banner1.jpg" alt="Banner 1">
+        </div>
+        <div class="slide">
+            <img src="imagenes/banner2.webp" alt="Banner 2">
+        </div>
+        <div class="slide">
+            <img src="imagenes/banner3.jpg" alt="Banner 3">
+        </div>
+    </section>
+
+    <!-- Espacio de separación -->
+    <div style="height: 2rem;"></div>
+
+    <section id="contacto">
+        <h2>Contáctenos</h2>
+        <form id="contactForm">
+
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" placeholder="Nombre" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras permitidas">
+            </div>
+
+            <div class="form-group">
+                <label for="apellidos">Apellidos</label>
+                <input type="text" id="apellidos" placeholder="Apellidos" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras permitidas">
+            </div>
+
+            <div class="form-group full-width">
+                <label for="email">Correo Electrónico</label>
+                <input type="email" id="email" placeholder="Correo Electrónico" required>
+            </div>
+
+            <div class="form-group">
+                <label for="asunto">Asunto</label>
+                <input type="text" id="asunto" placeholder="Asunto" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras permitidas">
+            </div>
+
+            <div class="form-group">
+                <label for="cine">Seleccione un Cine</label>
+                <select id="cine" required>
+                    <option value="">Seleccione un cine</option>
+                    <option value="Cinerama Pacífico">Cinerama Pacífico</option>
+                    <option value="Cinerama Minka">Cinerama Minka</option>
+                    <option value="Cinerama Chimbote">Cinerama Chimbote</option>
+                    <option value="Cinerama Quinde">Cinerama Quinde</option>
+                    <option value="Cinerama Tarapoto">Cinerama Tarapoto</option>
+                </select>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="mensaje">Mensaje</label>
+                <!-- 🚩 Sin pattern porque en <textarea> no funciona -->
+                <textarea id="mensaje" placeholder="Mensaje" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-enviar">
+                ✈ ENVIAR MENSAJE
+            </button>
+
+        </form>
+
+        
+    </section>
+
+    <!-- Espacio de separación -->
+    <div style="height: 2rem;"></div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Redes Sociales</h3>
+                <ul class="social-links">
+                    <li><a href="https://www.facebook.com/" target="_blank">Facebook</a></li>
+                    <li><a href="https://www.facebook.com/TwitterInc/?locale=es_LA" target="_blank">Twitter</a></li>
+                    <li><a href="https://www.instagram.com/accounts/login/?source=auth_switcher&locale=es_ES"
+                            target="_blank">Instagram</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p>📞 Teléfono: <a href="tel:967356714">967356714</a></p>
+                <p>📧 Email: <a href="mailto:info@empresa.com">info@empresa.com</a></p>
+                <p>📍 Dirección: Calle Ejemplo 123, Ciudad, País</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="quick-links">
+                    <a href="#inicio" class="scroll-suave">Inicio</a>
+                 
+                    
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <b>
+                <marquee>
+                    <p>&copy; 2025 Mi Empresa. Todos los derechos son reservados.</p>
+                </marquee>
+            </b>
+        </div>
+
+    </footer>
+
+            <!-- Toast personalizado -->
+        <div id="toast" class="toast"></div>
+
+         <!-- audio -->
+
+        <audio id="audio-enviado" src="audio/formulario.mp3"></audio>
+
+                
+
+</body>
+</html>
