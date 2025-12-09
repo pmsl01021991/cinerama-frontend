@@ -1,106 +1,126 @@
+use cinerama
 
-
--- Asegurarse de usar la base de datos
-CREATE DATABASE IF NOT EXISTS cinerama;
-USE cinerama;
-
-CREATE TABLE IF NOT EXISTS cines (
+CREATE TABLE cines (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    direccion VARCHAR(255),
-    ciudad VARCHAR(100),
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    nombre VARCHAR(120) NOT NULL,
+    ciudad VARCHAR(80),
+    direccion VARCHAR(180),
+    activo TINYINT(1) DEFAULT 1,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE salas
-ADD cine_id INT NOT NULL,
-ADD FOREIGN KEY (cine_id) REFERENCES cines(id) ON DELETE CASCADE;
+INSERT INTO cines (nombre, ciudad, direccion) VALUES
+('CINERAMA PACIFICO', 'LIMA', 'AV JOSE PARDO 121 MIRAFLORES - LIMA - LIMA'),
+('CINERAMA MINKA', 'CALLAO', 'AV ARGENTINA 3093 CC MINKA 2DO NIVEL CALLAO'),
+('CINERAMA CHIMBOTE', 'CHIMBOTE', 'AV. V. RAUL H. DE LA TORRE MEGA PLAZA CHIMBOTE'),
+('CINERAMA QUINDE', 'ICA', 'AV LOS MAESTROS S/N CC EL QUINDE'),
+('CINERAMA TARAPOTO', 'TARAPOTO', 'AV ALFONSO UGARTE 1360 TARAPOTO'),
+('CINERAMA CAJAMARCA', 'CAJAMARCA', 'JR SOR MANUELA GIL 151 CC EL QUINDE CAJAMARCA'),
+('CINERAMA SOL', 'ICA', 'AV SAN MARTIN 727 CC PLAZA DEL SOL ICA'),
+('CINERAMA HUACHO', 'HUACHO', 'COLON 601 CC PLAZA DEL SOL 2DO NIVEL'),
+('CINERAMA MOYOBAMBA', 'MOYOBAMBA', 'JR MANUEL DEL AGUILA 542 MOYOBAMBA'),
+('CINERAMA CUZCO', 'CUSCO', 'CALLE CRUZ VERDE 347 CC IMPERIAL PLAZA CUSCO'),
+('CINERAMA PIURA', 'PIURA', 'AV GRAU 1460 CC. PLAZA DEL SOL');
 
-
--- =======================================
--- Tabla de usuarios
--- =======================================
-CREATE TABLE IF NOT EXISTS usuarios (
+CREATE TABLE peliculas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    es_admin BOOLEAN DEFAULT FALSE,
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    codigo VARCHAR(30) NOT NULL UNIQUE,    -- lilo, karate, encerrado, hurry
+    titulo VARCHAR(150) NOT NULL,
+    director VARCHAR(120),
+    duracion_min INT,
+    clasificacion VARCHAR(50),
+    genero VARCHAR(60),
+    estado ENUM('EN_CARTELERA','PROXIMO','RETIRADO') DEFAULT 'EN_CARTELERA'
 );
 
--- =======================================
--- Tabla de películas
--- =======================================
-CREATE TABLE IF NOT EXISTS peliculas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    titulo VARCHAR(255) NOT NULL,
-    descripcion TEXT,
-    duracion_min INT NOT NULL,
-    poster_url VARCHAR(500),
-    trailer_url VARCHAR(500),
-    fecha_estreno DATE,
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+ALTER TABLE peliculas
+ADD estreno DATE NULL,
+ADD reparto TEXT NULL;
 
--- =======================================
--- Tabla de salas
--- =======================================
-CREATE TABLE IF NOT EXISTS salas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    tipo VARCHAR(10) NOT NULL, -- Ej: 2D o 3D
-    filas INT NOT NULL,
-    columnas INT NOT NULL,
-    pasillo VARCHAR(50), -- Guardamos como texto el array de pasillo
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+INSERT INTO peliculas (codigo, titulo, director, duracion_min, clasificacion, genero, estreno, reparto)
+VALUES
+('chavin', 'CHAVIN DE HUANTAR EL RESCATE DEL SIGLO', 'DIEGO DE LEÓN', 95, 'MAYORES DE 14', 'ANIMADO', '2025-10-30', 
+ 'ALFONSO DIBÓS, ANDRE SILVA, CARLOS THORNTON, CHRISTIAN ESQUIVEL, CONNIE CHAPARRO, MIGUEL IZA, RODRIGO SÁNCHEZ, SERGIO GALLIANI'),
 
--- =======================================
--- Tabla de funciones
--- =======================================
-CREATE TABLE IF NOT EXISTS funciones (
+('hurry', 'Hurry', 'DIRECTOR X', 100, 'TODO ESPECTADOR', 'AVENTURA/FAMILIAR', '2025-08-01',
+ 'Actores y actrices reconocidos'),
+
+('zootopia2', 'ZOOTOPIA 2', 'JARED BUSH, BYRON HOWARD', 108, 'TODO ESPECTADOR', 'ANIMACIÓN', '2025-11-27',
+ '-'),
+
+('nada3', 'NADA ES LO QUE PARECE 3', 'RUBEN FLEISCHER', 112, 'MAYORES DE 14', 'ACCIÓN', '2025-11-13',
+ 'MORGAN FREEMAN, ROSAMUND PIKE, WOODY HARRELSON');
+
+
+CREATE TABLE funciones (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    cine_id INT NOT NULL,
     pelicula_id INT NOT NULL,
-    sala_id INT NOT NULL,
+    tipo_cine ENUM('2D','3D') NOT NULL,
+    sala VARCHAR(10) NOT NULL,
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
-    precio DECIMAL(10,2) NOT NULL,
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (pelicula_id) REFERENCES peliculas(id) ON DELETE CASCADE,
-    FOREIGN KEY (sala_id) REFERENCES salas(id) ON DELETE CASCADE
+    precio DECIMAL(8,2) NOT NULL DEFAULT 12.00,
+    FOREIGN KEY (cine_id) REFERENCES cines(id),
+    FOREIGN KEY (pelicula_id) REFERENCES peliculas(id)
 );
 
--- =======================================
--- Tabla de reservas
--- =======================================
-CREATE TABLE IF NOT EXISTS reservas (
+
+-- Supongamos:
+-- CINERAMA PACIFICO tiene id = 1
+-- Lilo y Stitch tiene id = 1
+
+INSERT INTO funciones (cine_id, pelicula_id, tipo_cine, sala, fecha, hora, precio)
+VALUES
+(1, 1, '2D', '01', CURDATE(), '15:20:00', 12.00),
+(1, 1, '2D', '01', CURDATE(), '17:00:00', 12.00),
+(1, 1, '3D', '02', CURDATE(), '19:10:00', 15.00);
+
+
+CREATE TABLE reservas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT NOT NULL,
-    funcion_id INT NOT NULL,
-    cantidad INT NOT NULL,
-    total DECIMAL(10,2) NOT NULL,
-    fecha_reserva TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-    FOREIGN KEY (funcion_id) REFERENCES funciones(id) ON DELETE CASCADE
+
+    -- Paso 1: cine
+    cine VARCHAR(120) NOT NULL,
+
+    -- Paso 2: película (lo conectaremos cuando actualices info.js)
+    pelicula_codigo VARCHAR(30) NULL,
+    pelicula_titulo VARCHAR(150) NULL,
+
+    -- Paso 3: horario (podemos vincular a funciones.id después)
+    funcion_id INT NULL,
+    tipo_cine VARCHAR(5) NULL,          -- '2D' o '3D'
+    sala VARCHAR(10) NULL,
+    horario VARCHAR(10) NULL,           -- '03:20 pm', etc.
+
+    -- Paso 4: asientos
+    asientos VARCHAR(255) NULL,         -- ej: 'A1,A2,A3'
+    cantidad_entradas INT NULL,
+    monto_entradas DECIMAL(8,2) NULL,
+
+    -- Paso 5: pago (esto es lo que YA usa tu pago.js)
+    nombre_cliente VARCHAR(120) NULL,
+    correo_cliente VARCHAR(120) NULL,
+    metodo_pago VARCHAR(30) NULL,       -- 'tarjeta' / 'billetera'
+    billetera VARCHAR(20) NULL,         -- 'Yape' / 'Plin' / NULL
+    estado ENUM('PENDIENTE','PAGADO','CANCELADO') DEFAULT 'PENDIENTE',
+
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP
 );
 
--- =======================================
--- Tabla de asientos reservados
--- =======================================
-CREATE TABLE IF NOT EXISTS asientos_reservados (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    reserva_id INT NOT NULL,
-    asiento_codigo VARCHAR(10) NOT NULL, -- Ejemplo: A5
-    FOREIGN KEY (reserva_id) REFERENCES reservas(id) ON DELETE CASCADE
-);
 
--- =======================================
--- Datos iniciales opcionales
--- =======================================
-INSERT INTO salas (nombre, tipo, filas, columnas, pasillo) VALUES
-('Sala 1', '2D', 10, 10, '[7,8,2,3]'),
-('Sala 2', '3D', 10, 11, '[2,3,7]');
 
-select * from reservas
+ALTER TABLE reservas
+ADD CONSTRAINT fk_reservas_funciones
+FOREIGN KEY (funcion_id)
+REFERENCES funciones(id);
 
+
+
+ALTER TABLE reservas
+ADD COLUMN tipo_sala ENUM('2D', '3D') AFTER pelicula;
+
+
+select * from reservas r ;
